@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Variant Delete</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Variant <b><span th:text="${variantId}">VariantID</span></b> has been deactivated. Below are the details: </p>
+<ul>
+    <li>ID: <b><span th:text="${variantId}">variant-1-1</span></b></li>
+    <li>Product ID: <b><span th:text="${productId}">product-1-1</span></b></li>
+    <li>Name: <b><span th:text="${productName}">product-1-1</span></b></li>
+    <li>Description: <b><span th:text="${productDesc}">Description</span></b></li>
+    <li>Category: <b><span th:text="${category}">category-1-1</span></b></li>
+</ul>
+<p>This variant is no more available for selling.</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

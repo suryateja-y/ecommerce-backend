@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employee Registration</title>
+    <style>
+        table, table th, table td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        table td {
+            padding-left: 5px;
+            padding-right: 5px;
+            font-family: "Bookman Old Style",sans-serif
+        }
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<h4>Hearty Welcome to Academy ECommerce Application!!!</h4>
+<p>Below are your account details: </p>
+<table>
+    <tbody>
+    <tr th:each="entry: ${employeeData}">
+        <td th:text="${entry.key}">id</td>
+        <td th:text="${entry.value}">sample id</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<p>Your onboarding details has been sent for the approval. Track the request using the Approval ID.</p>
+<p>Your Role and Designation will be updated along with the approval.</p>
+<p>Approval Id: <b><span th:text="${approvalId}">appr-1-1</span></b></p>
+<br>
+<p>You can add and sell products after the approval.</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

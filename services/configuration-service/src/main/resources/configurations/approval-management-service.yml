@@ -1,0 +1,13 @@
+server:
+    port: 8084
+application:
+    kafka:
+        consumer:
+            user-update-group: user-update-approval-group-1
+spring:
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: approval-management
+            authentication-database: admin

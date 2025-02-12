@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Variant Status Update</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Variant <b><span th:text="${variantId}">VariantID</span></b> has been <b><span th:text="${status}">Status</span></b>.</p>
+<p>Please contact Customer Care for any queries.</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

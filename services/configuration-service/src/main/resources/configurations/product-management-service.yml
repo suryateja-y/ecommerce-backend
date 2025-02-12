@@ -1,0 +1,14 @@
+server:
+    port: 8083
+application:
+    kafka:
+        consumer:
+            product-group: product-consumer-group
+            variant-group: variant-consumer-group
+spring:
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: product-management-service
+            authentication-database: admin

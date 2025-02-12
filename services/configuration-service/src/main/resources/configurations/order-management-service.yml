@@ -1,0 +1,15 @@
+application:
+    kafka:
+        consumer:
+            payment-group: payment-order-group-1
+            inventory-approval-group: inventory-approval-group-1
+spring:
+    datasource:
+        url: jdbc:h2:mem:order-management
+        driver-class-name: org.h2.Driver
+        username: root
+        password: <DATABASE_PASSWORD>
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+server:
+    port: 8088

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Seller Address Update</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+        #addressContainer {
+            padding-left: 20px;
+            font-size: medium;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Update for the Company Address has been sent for the approval.</p>
+<p>Below are the address details: </p>
+<div id="addressContainer">
+    <div th:if="${#strings.isEmpty(address.houseNumber)}">
+        <span th:text="${address.houseNumber}">HouseNumber</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.street)}">
+        <span th:text="${address.street}">Street</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.addressLine1)}">
+        <span th:text="${address.addressLine1}">Address Line 1</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.addressLine2)}">
+        <span th:text="${address.addressLine2}">Address Line 2</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.city)}">
+        <span th:text="${address.city}">City</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.state)}">
+        <span th:text="${address.state}">State</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.country)}">
+        <span th:text="${address.country}">Country</span>
+    </div>
+    <div th:if="${#strings.isEmpty(address.zip)}">
+        <span th:text="${address.zip}">ZIP</span>
+    </div>
+</div>
+<br>
+<p>You can use this address after the approval.</p>
+<p>Approval ID: <b><span th:text="${approvalId}">ApprovalID</span></b></p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

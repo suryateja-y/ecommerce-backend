@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Inventory Update</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>No stock available for the Inventory <b><span th:text="${inventoryId}">InventoryID</span></b>.</p>
+<ul>
+    <li>Variant ID: <b><span th:text="${variantId}">variant-1-1</span></b></li>
+    <li>Unit Price: <b><span th:text="${unitPrice}">UnitPrice</span></b></li>
+</ul>
+<p>Please add the stock to continue the selling of the Product.</p>
+<p>Happy Selling!!!</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

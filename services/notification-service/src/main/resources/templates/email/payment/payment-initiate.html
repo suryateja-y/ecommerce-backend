@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Payment Initiate</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+        .details {
+            width: 70%;
+        }
+        table, tr, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .first {
+            width: 30%;
+        }
+        td {
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Payment has been initiated for the Order <b><span th:text="${orderId}">OrderID</span></b>.</p>
+<table class="details">
+    <tr>
+        <td class="first">Payment ID</td>
+        <td class="second" th:text="${paymentId}">Payment ID</td>
+    </tr>
+    <tr>
+        <td class="first">Total Amount</td>
+        <td class="second" th:text="${total}">$0</td>
+    </tr>
+    <tr>
+        <td class="first">Date</td>
+        <td class="second" th:text="${startDate}">Date</td>
+    </tr>
+    <tr>
+        <td class="first">Payment URL</td>
+        <td class="second" th:text="${paymentUrl}">Payment URL</td>
+    </tr>
+    <tr>
+        <td class="first">Expiration Time</td>
+        <td class="second" th:text="${expirationTime}">ExpirationTime</td>
+    </tr>
+</table>
+<p>Please complete the payment using the Payment URL before the expiration time.</p>
+<p>If not done, your order will automatically gets cancelled.</p>
+<p>Please contact Customer Care for any queries.</p>
+<p>Happy Shopping!!!</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

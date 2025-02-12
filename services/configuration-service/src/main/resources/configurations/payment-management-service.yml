@@ -1,0 +1,20 @@
+server:
+    port: 8089
+application:
+    gateway:
+        secret-key: <STRIPE_SECRET_KEY>
+        successUrl: "http://localhost:${server.port}/success"
+        cancelUrl: "http://localhost:${server.port}/cancel"
+        currency: INR
+        webhook-secret: <STRIPE_WEBHOOK_SECRET_KEY>
+    kafka:
+        consumer:
+            order-group: order-payment-group-1
+spring:
+    datasource:
+        url: jdbc:h2:mem:payment-management-service
+        driver-class-name: org.h2.Driver
+        username: root
+        password: <DATABASE_PASSWORD>
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Order Create</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+        .order-details {
+            width: 90%;
+        }
+        .order-id, .order-date {
+            width: 50%;
+        }
+        table, tr, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td {
+            padding-left: 10px;
+            height: 15px;
+        }
+        .sno {
+            width: 5%;
+        }
+        .name {
+            width: 60%;
+        }
+        .quantity, .sub-total {
+            width: 10%;
+        }
+        .u-price {
+            width: 15%;
+        }
+        .total-label {
+            text-align: center;
+        }
+        .total {
+            text-align: end;
+            padding-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Congratulations!!!</p>
+<p>Your order has been placed successfully!!!</p>
+<table class="order-details">
+    <tr>
+        <td class="order-id">OrderID: <b><span th:text="${orderId}">OrderID</span></b></td>
+        <td class="order-date">OrderDate: <b><span th:text="${orderDate}">OrderDate</span></b></td>
+    </tr>
+</table>
+<br>
+<table>
+    <thead>
+        <tr>
+            <th class="sno">S.No.</th>
+            <th class="name">Product Name</th>
+            <th class="quantity">Quantity</th>
+            <th class="u-price">Unit Price</th>
+            <th class="sub-total">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="orderItem, iterator: ${orderItems}">
+            <td th:text="${iterator.count}">S.No.</td>
+            <td th:text="${orderItem.productName}">Name</td>
+            <td th:text="${orderItem.quantity}">0</td>
+            <td th:text="${orderItem.unitPriceString}">$10</td>
+            <td th:text="${orderItem.totalPriceString}">$0</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="total-label"><b>Total</b></td>
+            <td colspan="3" class="total"><b><span th:text="${total}">$100000</span></b></td>
+        </tr>
+    </tbody>
+</table>
+<p>Invoice for the Order has been successfully generated with the ID <b><span th:text="${invoiceId}">InvoiceID</span></b></p>
+<br>
+<p>Your order can be tracked using the Tracking ID <b><span th:text="${trackingId}">TrackingID</span></b>.</p>
+<p>Thank you for placing the Order.</p>
+<p>Happy Shopping!!!</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

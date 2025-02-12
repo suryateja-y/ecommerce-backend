@@ -1,0 +1,76 @@
+application:
+    # noinspection SpringBootApplicationYaml
+    version: v1
+    authentication-service: authentication-service
+    secret: <ENTRY_SECRET>
+    issuer: <ENTRY_TOKEN_ISSUER>
+    gateway-secret: <GATEWAY_SECRET>
+    gateway-issuer: <GATEWAY_TOKEN_ISSUER>
+    expiration-time: 300000
+    services:
+        inventory-management-service: order-management-service
+        user-management-service: user-management-service
+        cart-management-service: cart-management-service
+        approval-management-service: approval-management-service
+        product-management-service: product-management-service
+        authentication-service: authentication-service
+    kafka:
+        host: localhost:9092
+        topics:
+            order-topic: order
+            user-update-topic: user-update
+            approval-notification-topic: approval-notification
+            inventory-update-topic: inventory-update
+            customer-update-topic: customer-update
+            seller-update-topic: seller-update
+            employee-update-topic: employee-update
+            category-topic: category
+            product-topic: product
+            variant-topic: variant
+            inventory-topic: inventory
+            payment-topic: payment
+            approved-product-topic: approved-product
+            approved-variant-topic: approved-variant
+            product-approval-topic: product-approval
+            variant-approval-topic: variant-approval
+            inventory-approval-topic: inventory-approval
+            product-update-topic: product-update
+            variant-update-topic: variant-update
+            user-approval-topic: user-approval
+    global:
+        user:
+            password: <GLOBAL_USER_PASSWORD>
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka
+    instance:
+        prefer-ip-address: true
+spring:
+    cloud:
+        config:
+            override-system-properties: false
+    kafka:
+        producer:
+            bootstrap-servers: ${application.kafka.host}
+        consumer:
+            bootstrap-servers: ${application.kafka.host}
+    jpa:
+        generate-ddl: true
+        hibernate:
+            ddl-auto: create
+    h2:
+        console:
+            enabled: true
+debug: true
+logging:
+    level:
+        reactor:
+            netty:
+                http:
+                    client: INFO
+        root: info
+server:
+    error:
+        whitelabel:
+            enabled: false

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employment Details Update</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>Congratulations!!!</p>
+<p>Your Employment Details has been updated by your Manager</p>
+<ul>
+    <li>Employee ID: <b><span th:text="${employeeId}">EmployeeID</span></b></li>
+    <li>Designation: <b><span th:text="${designation}">Designation</span></b></li>
+</ul>
+<br>
+<p>Please track the approval for the final approval of your Employment</p>
+<p>Approval ID: <b><span th:text="${approvalId}">ApprovalID</span></b></p>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

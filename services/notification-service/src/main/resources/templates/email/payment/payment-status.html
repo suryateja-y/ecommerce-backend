@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Payment Success</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+        .details {
+            width: 70%;
+        }
+        table, tr, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .first {
+            width: 30%;
+        }
+        td {
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<div th:if="${#strings.equals(paymentStatus, 'CANCELLED')}">
+    <p>Your payment has been <b>CANCELLED</b>.</p>
+    <p>Payment ID: <span th:text="${paymentId}">PaymentID</span></p>
+    <p>Reason: <span th:text="${reason}">Reason</span></p>
+</div>
+<div th:unless="${#strings.equals(paymentStatus, 'CANCELLED')}">
+    <p>Your payment has been <b><span th:text="paymentStatus">REASON</span></b>.</p>
+    <p>Payment ID: <span th:text="${paymentId}">PaymentID</span></p>
+</div>
+<p>Please contact Customer Care for any queries.</p>
+
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

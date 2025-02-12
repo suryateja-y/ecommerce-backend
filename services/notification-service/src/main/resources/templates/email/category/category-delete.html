@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Category Delete</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi,</p>
+<p>Below category has been removed from the application.</p>
+<ul>
+    <li>ID: <b><span th:text="${categoryId}">category-1-1</span></b></li>
+    <li>Name: <b><span th:text="${categoryName}">category-1-1</span></b></li>
+    <li>Description: <b><span th:text="${categoryDesc}">Description</span></b></li>
+</ul>
+<p>Products with this category are no more valid and will not be available for selling.</p>
+<p>Please contact customer care for any queries.</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

@@ -1,0 +1,15 @@
+application:
+    kafka:
+        consumer:
+            product-approval-group: product-approval-group-1
+            variant-approval-group: variant-approval-group-1
+            inventory-approval-group: inventory-approval-group-1
+server:
+    port: 8082
+spring:
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: product-onboarding
+            authentication-database: admin

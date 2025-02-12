@@ -1,0 +1,13 @@
+application:
+    kafka:
+        consumer:
+            user:
+                user-approval-group: user-approval-group-2
+server:
+    port: 8081
+spring:
+    datasource:
+        url: jdbc:h2:mem:${spring.application.name}
+        driver-class-name: org.h2.Driver
+        username: root
+        password: <DATABASE_PASSWORD>

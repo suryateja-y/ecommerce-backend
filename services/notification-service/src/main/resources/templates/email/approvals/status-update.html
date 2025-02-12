@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Approval Request Registration</title>
+    <style>
+        body {
+            font-family: "Bookman Old Style", cursive;
+        }
+        .disclaimer {
+            font-size: 15px;
+            font-family: "Times New Roman",system-ui;
+        }
+    </style>
+</head>
+<body>
+<p class="greetings">Hi <b><span th:text="${userName}">User</span></b>,</p>
+<p>There is a movement in your Approval Request.</p>
+<p>Approval request has been <b><span th:text="${status}">APPROVED</span></b> by <b><span th:text="${updatedBy}">ADMIN.</span></b></p>
+<p>Your request is currently assigned to <b><span th:text="${assignedTo}">MANAGER</span></b>.</p>
+<ul>
+    <li>Approval ID: <b><span th:text="${approvalId}">approval-1-1</span></b></li>
+    <li>Title: <b><span th:text="${title}">Approval Request Title</span></b></li>
+    <li>Assigned To: <b><span th:text="${assignedTo}">Currently Assigned To</span></b></li>
+</ul>
+<p></p>
+<p>Please track the approval using the Approval ID. Contact Customer Care for any queries.</p>
+<br>
+<p>Kind Regards,</p>
+<p><b>Academy ECommerce App Team</b></p>
+<br>
+<p class="disclaimer"><i>This is an auto-generated email - please do not reply to it. If you have any queries, please email to the support!!!</i></p>
+</body>
+</html>

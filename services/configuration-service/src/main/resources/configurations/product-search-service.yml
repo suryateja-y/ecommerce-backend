@@ -1,0 +1,17 @@
+server:
+    port: 8086
+application:
+    kafka:
+        consumer:
+            inventory-update-group: product-search-inventory-group-1
+            product-update-group: product-search-product-group-1
+            seller-update-group: product-search-seller-group-1
+            variant-update-group: product-search-variant-group-1
+spring:
+    data:
+        elasticsearch:
+            repositories:
+                enabled: true
+    elasticsearch:
+        uris: [ http://localhost:9200 ]
+        connection-timeout: 10s
