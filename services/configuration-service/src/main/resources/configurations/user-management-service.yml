@@ -3,6 +3,9 @@ application:
         consumer:
             user:
                 user-approval-group: user-approval-group-2
+    security:
+        allow:
+            specific: /api/${application.version}/users/customers/register, /api/${application.version}/users/employees/register, /api/${application.version}/users/sellers/register
 server:
     port: 8081
 spring:

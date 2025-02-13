@@ -11,13 +11,13 @@ import java.util.List;
 @Service
 public class JWTProvider implements ITokenProvider {
 
-    @Value(("${application.secret}"))
+    @Value(("${application.gateway-secret}"))
     private String secret;
 
     @Value("${application.expiration-time}")
     private long expirationTime;
 
-    @Value("${application.issuer}")
+    @Value("${application.gateway-issuer}")
     private String issuer;
 
     @Override

@@ -40,8 +40,8 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         Employee admin = new Employee();
 
         User adminUser = new User();
-        adminUser.setId(GlobalData.ADMIN_ID);
-        adminUser.setEmail(GlobalData.ADMIN_EMAIL);
+        adminUser.setId("19797206-09af-4809-88a1-04627d2bf632");
+        adminUser.setEmail("academy@gmail.com");
         adminUser.setUserType(UserType.EMPLOYEE);
         adminUser.setUserState(UserState.APPROVED);
         adminUser.setFullName("Academy");
@@ -54,14 +54,14 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         admin.setBloodGroup("O+");
         admin.setGender(Gender.MALE);
         admin.setDesignation("CEO");
-        admin.setEmployeeId("Academy-000");
+        admin.setEmployeeId("Academy-007");
         employeeRepository.save(admin);
 
         // Creating Seller
         Seller seller = new Seller();
         User sellerUser = new User();
-        sellerUser.setId(GlobalData.SELLER_ID);
-        sellerUser.setEmail(GlobalData.SELLER_EMAIL);
+        sellerUser.setId("48341c45-9ded-4c4e-b2f7-bf85ff61acdf");
+        sellerUser.setEmail("academy_seller@gmail.com");
         sellerUser.setUserType(UserType.SELLER);
         sellerUser.setUserState(UserState.APPROVED);
         sellerUser.setFullName("Academy");
@@ -80,7 +80,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         address.setCity("Star City");
         address.setState("Milky Way");
         address.setCountry("India");
-        address.setZip("666666");
+        address.setZip("523372");
         address = addressRepository.save(address);
 
         seller.setAddress(address);
@@ -88,8 +88,8 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         Seller anotherSeller = new Seller();
         User anotherSellerUser = new User();
-        anotherSellerUser.setId(GlobalData.SELLER2_ID);
-        anotherSellerUser.setEmail(GlobalData.SELLER_EMAIL);
+        anotherSellerUser.setId("48341c45-9ded-4c4e-b2f7-bf85ff61acdg");
+        anotherSellerUser.setEmail("academy_another_seller@gmail.com");
         anotherSellerUser.setUserType(UserType.SELLER);
         anotherSellerUser.setUserState(UserState.APPROVED);
         anotherSellerUser.setFullName("Academy");
@@ -108,7 +108,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         anotherSellerAddress.setCity("Star City");
         anotherSellerAddress.setState("Milky Way");
         anotherSellerAddress.setCountry("India");
-        anotherSellerAddress.setZip("666666");
+        anotherSellerAddress.setZip("523635");
         anotherSellerAddress = addressRepository.save(anotherSellerAddress);
 
         anotherSeller.setAddress(anotherSellerAddress);
@@ -117,8 +117,8 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         // Creating Customer
         Customer customer = new Customer();
         User customerUser = new User();
-        customerUser.setId(GlobalData.CUSTOMER_ID);
-        customerUser.setEmail(GlobalData.CUSTOMER_EMAIL);
+        customerUser.setId("ec311d67-0be7-474b-aa18-f9b42bd25399");
+        customerUser.setEmail("academy_customer@gmail.com");
         customerUser.setUserType(UserType.CUSTOMER);
         customerUser.setUserState(UserState.APPROVED);
         customerUser.setFullName("Academy");
@@ -134,8 +134,8 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         // Creating Employee
         Employee employee = new Employee();
         User employeeUser = new User();
-        employeeUser.setId(GlobalData.EMPLOYEE_ID);
-        employeeUser.setEmail(GlobalData.EMPLOYEE_EMAIL);
+        employeeUser.setId("19b3d9c8-486c-4100-bc21-46f03942be41");
+        employeeUser.setEmail("academy_employee@gmail.com");
         employeeUser.setUserType(UserType.EMPLOYEE);
         employeeUser.setUserState(UserState.APPROVED);
         employeeUser.setFullName("Academy");
@@ -147,15 +147,15 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         employee.setAge(30);
         employee.setBloodGroup("O+");
         employee.setGender(Gender.MALE);
-        employee.setDesignation("AI Scientist");
+        employee.setDesignation("Automation Engineer");
         employee.setEmployeeId("Emp-01");
         employeeRepository.save(employee);
 
         // Seller Manager
         Employee sellerManager = new Employee();
         User sellerManagerUser = new User();
-        sellerManagerUser.setId(GlobalData.SELLER_MANAGER_ID);
-        sellerManagerUser.setEmail(GlobalData.SELLER_MANAGER_EMAIL);
+        sellerManagerUser.setId("02fe3dcc-2ebb-4e15-96c1-59ae3fa3f12e");
+        sellerManagerUser.setEmail("academy_seller_manager@gmail.com");
         sellerManagerUser.setUserType(UserType.EMPLOYEE);
         sellerManagerUser.setUserState(UserState.APPROVED);
         sellerManagerUser.setFullName("Academy");
@@ -173,8 +173,8 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         Employee productManager = new Employee();
         User productManagerUser = new User();
-        productManagerUser.setId(GlobalData.PRODUCT_MANAGER_ID);
-        productManagerUser.setEmail(GlobalData.PRODUCT_MANAGER_EMAIL);
+        productManagerUser.setId("02fe3dcc-2ebb-4e15-96c1-59ae3fa3f12f");
+        productManagerUser.setEmail("academy_product_manager@gmail.com");
         productManagerUser.setUserType(UserType.EMPLOYEE);
         productManagerUser.setUserState(UserState.APPROVED);
         productManagerUser.setFullName("Academy");

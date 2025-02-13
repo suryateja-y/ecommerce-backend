@@ -13,10 +13,12 @@ import java.util.List;
 @Component
 public class InitializeProductNotifications {
     private final SettingRepository settingRepository;
+    private final StarterData starterData;
 
     @Autowired
-    public InitializeProductNotifications(SettingRepository settingRepository) {
+    public InitializeProductNotifications(SettingRepository settingRepository, StarterData starterData) {
         this.settingRepository = settingRepository;
+        this.starterData = starterData;
     }
 
     public void initialize() {
@@ -28,7 +30,7 @@ public class InitializeProductNotifications {
         register.setUserTypes(List.of(UserType.SELLER));
         EmailRegister emailRegister = new EmailRegister();
         emailRegister.setTemplateName("/email/product/product-approved");
-        emailRegister.setCc(List.of(GlobalData.PRODUCT_MANAGER_ID));
+        emailRegister.setCc(List.of(starterData.getProductManagerId()));
         emailRegister.setSubject("Get ready to expand the business! Your product has been approved!");
         register.setEmailRegister(emailRegister);
         settingRepository.save(register);

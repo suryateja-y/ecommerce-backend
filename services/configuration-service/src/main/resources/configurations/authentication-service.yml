@@ -2,6 +2,9 @@ application:
     kafka:
         user:
             user-approval-group: user-approval-group-1
+    security:
+        allow:
+            specific: /api/${application.version}/authentication/login, api/${application.version}/authentication/isValid
 spring:
     datasource:
         driver-class-name: org.h2.Driver

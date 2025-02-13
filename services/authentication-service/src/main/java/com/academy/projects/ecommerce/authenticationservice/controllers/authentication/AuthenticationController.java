@@ -25,7 +25,6 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    // Should not be a public API
     @PostMapping("/register")
     public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         SignUpResponseDto responseDto = new SignUpResponseDto();

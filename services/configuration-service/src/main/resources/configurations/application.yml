@@ -37,9 +37,14 @@ application:
             product-update-topic: product-update
             variant-update-topic: variant-update
             user-approval-topic: user-approval
-    global:
+    security:
+        allow:
+            generic: /h2-console/**,/v3/api-docs/**,/swagger-ui/**
+            specific:
+        gateway-prefix: Gateway
         user:
-            password: <GLOBAL_USER_PASSWORD>
+            global:
+                password: <GLOBAL_USER_PASSWORD>
 eureka:
     client:
         service-url:

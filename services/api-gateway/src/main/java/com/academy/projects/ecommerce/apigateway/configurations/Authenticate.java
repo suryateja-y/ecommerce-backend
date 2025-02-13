@@ -63,7 +63,7 @@ public class Authenticate extends AbstractGatewayFilterFactory<Authenticate.Conf
                         throw new TokenValidationException("User is not approved yet!!! Please go through the approval process!!!");
                     ServerHttpRequest serverHttpRequest = exchange.getRequest();
                     String forwardToken = tokenProvider.generateToken(userPermissionsDto.getUserId(), userPermissionsDto.getRolesAndPermissions());
-                    serverHttpRequest.mutate().header(HttpHeaders.AUTHORIZATION, "Gateway " + forwardToken + "s").build();
+                    serverHttpRequest.mutate().header(HttpHeaders.AUTHORIZATION, "Gateway " + forwardToken).build();
                     exchange.mutate().request(serverHttpRequest).build();
                 }
             }

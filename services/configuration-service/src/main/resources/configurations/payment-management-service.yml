@@ -10,6 +10,9 @@ application:
     kafka:
         consumer:
             order-group: order-payment-group-1
+    security:
+        allow:
+            specific: /api/${application.version}/webhooks
 spring:
     datasource:
         url: jdbc:h2:mem:payment-management-service

@@ -2,48 +2,39 @@ package com.academy.projects.ecommerce.notificationservice.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
-@Service
+@Service("JavaWebToken_Provider")
 public class JWTProvider implements ITokenProvider {
-
-    @Value(("${application.secret}"))
-    private String secret;
-
-    @Value("${application.expiration-time}")
-    private long expirationTime;
-
-    @Value("${application.issuer}")
-    private String issuer;
-
-    public String getUserId(String token) {
+    private String getUserId(String token) {
         return JWT.decode(token).getSubject();
     }
-
-    @Override
-    public String getIssuer(String token) {
+    private String getIssuer(String token) {
         return JWT.decode(token).getIssuer();
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
-    public void validate(String token) throws InvalidTokenException {
+    public ValidationResponse validate(ValidationRequest request) {
+        ValidationResult result = ValidationResult.VALID;
+        String userId = "";
         try {
-            JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
+            JWT.require(Algorithm.HMAC256(request.getSecret())).build().verify(request.getToken());
+            if(!getIssuer(request.getToken()).equals(request.getIssuer())) throw new RuntimeException("Invalid token");
+            userId = getUserId(request.getToken());
         } catch (Exception exception) {
-            throw new InvalidTokenException(exception.getMessage());
+            result = exception.getMessage().contains("expire") ? ValidationResult.EXPIRED : ValidationResult.INVALID;
         }
+        return ValidationResponse.builder()
+                .userId(userId)
+                .result(result)
+                .build();
     }
 
     @Override
     public List<String> getPermissions(String token) {
         return JWT.decode(token).getClaim("permissions").asList(String.class);
-    }
-
-    public boolean isExpired(String token) {
-        return JWT.decode(token).getExpiresAt().before(new Date());
     }
 }

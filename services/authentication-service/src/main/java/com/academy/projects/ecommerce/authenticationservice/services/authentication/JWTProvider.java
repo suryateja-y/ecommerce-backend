@@ -36,6 +36,7 @@ public class JWTProvider implements ITokenProvider {
         return JWT.decode(token).getIssuer();
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public ValidationResponse validate(ValidationRequest request) {
         ValidationResult result = ValidationResult.VALID;

@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Component
 public class InitializeData implements ApplicationListener<ContextRefreshedEvent> {
-    @Value("${application.global.user.password}")
+    @Value("${application.security.user.global.password}")
     private String userPassword;
 
     private boolean alreadySetup = false;

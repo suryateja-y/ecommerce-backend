@@ -13,6 +13,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -20,13 +23,19 @@ public class SecurityConfiguration {
     @Value("${application.version}")
     private String version;
 
-    private final Authenticate authenticate;
+    @Value("${application.security.allow.generic}")
+    private List<String> genericAllowed;
+
+    @Value("${application.security.allow.specific}")
+    private List<String> specificAllowed;
+
+    private final Authentication authenticate;
 
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDenierErrorHandler accessDenierErrorHandler;
 
     @Autowired
-    public SecurityConfiguration(Authenticate authenticate, AuthenticationEntryPoint authenticationEntryPoint, AccessDenierErrorHandler accessDenierErrorHandler) {
+    public SecurityConfiguration(Authentication authenticate, AuthenticationEntryPoint authenticationEntryPoint, AccessDenierErrorHandler accessDenierErrorHandler) {
         this.authenticate = authenticate;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDenierErrorHandler = accessDenierErrorHandler;
@@ -37,9 +46,7 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/" + version + "/approvals/register", "/api/" + version + "/authentication/login", "api/" + version + "/authentication/isValid").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**","/swagger-ui/**").permitAll()
+                        .requestMatchers(allowUrls()).permitAll()
                         .anyRequest().authenticated())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
@@ -52,5 +59,12 @@ public class SecurityConfiguration {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID"));
         return http.build();
+    }
+
+    private String[] allowUrls() {
+        List<String> allowUrls = new LinkedList<>();
+        if((genericAllowed != null) && (!genericAllowed.isEmpty())) allowUrls.addAll(genericAllowed);
+        if((specificAllowed != null) && (!specificAllowed.isEmpty())) allowUrls.addAll(specificAllowed);
+        return allowUrls.toArray(new String[0]);
     }
 }
