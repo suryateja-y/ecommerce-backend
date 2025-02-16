@@ -21,8 +21,11 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class Authenticate extends AbstractGatewayFilterFactory<Authenticate.Config> {
 
-    @Value("${application.authentication-service}")
+    @Value("${application.services.authentication-service}")
     private String authserverName;
+
+    @Value("${application.version}")
+    private String version;
 
     private final RouteConfigurator routeConfigurator;
     private final DiscoveryClient discoveryClient;
@@ -41,7 +44,7 @@ public class Authenticate extends AbstractGatewayFilterFactory<Authenticate.Conf
         return ((exchange, chain) -> {
             if(routeConfigurator.isSecured.test(exchange.getRequest())) {
                 String requestPath = exchange.getRequest().getURI().getPath();
-                if(!(requestPath.matches(".*/api/v1/users/.*/register") || requestPath.matches(".*/api/v1/authentication/.*"))) {
+                if(!(requestPath.matches(".*/api/" + version + "/users/.*/register") || requestPath.matches(".*/api/" + version + "/authentication/.*"))) {
                     if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
                         throw new TokenValidationException("Token is missing!!! Please provide the Token for Authentication and Authorization!!!");
                     String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
@@ -51,7 +54,7 @@ public class Authenticate extends AbstractGatewayFilterFactory<Authenticate.Conf
 
                     RestTemplate restTemplate = new RestTemplateBuilder().build();
                     String authServerURL = getAuthServerHost();
-                    ResponseEntity<UserPermissionsDto> responseEntity = restTemplate.getForEntity("http://" + authServerURL + "/api/v1/authentication/isValid?token=" + token, UserPermissionsDto.class);
+                    ResponseEntity<UserPermissionsDto> responseEntity = restTemplate.getForEntity("http://" + authServerURL + "/api/" + version + "/authentication/isValid?token=" + token, UserPermissionsDto.class);
                     UserPermissionsDto userPermissionsDto = responseEntity.getBody();
                     if (userPermissionsDto == null)
                         throw new TokenValidationException("Failed to authenticate the user");

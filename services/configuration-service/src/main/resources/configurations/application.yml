@@ -1,7 +1,6 @@
 application:
     # noinspection SpringBootApplicationYaml
     version: v1
-    authentication-service: authentication-service
     secret: <ENTRY_SECRET>
     issuer: <ENTRY_TOKEN_ISSUER>
     gateway-secret: <GATEWAY_SECRET>
