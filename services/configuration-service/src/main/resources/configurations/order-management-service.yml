@@ -5,11 +5,13 @@ application:
             inventory-approval-group: inventory-approval-group-1
 spring:
     datasource:
-        url: jdbc:h2:mem:order-management
-        driver-class-name: org.h2.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3308/order-inventory
         username: root
-        password: <DATABASE_PASSWORD>
+        password: Surya@123
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: org.hibernate.dialect.MySQLDialect
+        hibernate:
+            ddl-auto: create
 server:
     port: 8088

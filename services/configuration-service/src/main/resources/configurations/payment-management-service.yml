@@ -15,9 +15,11 @@ application:
             specific: /api/${application.version}/webhooks
 spring:
     datasource:
-        url: jdbc:h2:mem:payment-management-service
-        driver-class-name: org.h2.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3309/payment-management
         username: root
         password: <DATABASE_PASSWORD>
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: org.hibernate.dialect.MySQLDialect
+        hibernate:
+            ddl-auto: create

@@ -103,9 +103,9 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         sellerRepository.deleteAll();
 
         Seller seller = new Seller();
-        seller.setId(GlobalData.SELLER_ID);
-        seller.setSellerId(GlobalData.SELLER_ID);
-        seller.setEmail(GlobalData.SELLER_EMAIL);
+        seller.setId("Seller-1");
+        seller.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdf");
+        seller.setEmail("academy_seller@gmail.com");
         seller.setFullName("Academy");
         seller.setBrandName("Academy");
         seller.setCompanyName("Academy");
@@ -120,9 +120,9 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         sellerRepository.save(seller);
 
         Seller anotherSeller = new Seller();
-        anotherSeller.setId(GlobalData.SELLER2_ID);
-        anotherSeller.setSellerId(GlobalData.SELLER2_ID);
-        anotherSeller.setEmail(GlobalData.SELLER2_EMAIL);
+        anotherSeller.setId("Seller-2");
+        anotherSeller.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdg");
+        anotherSeller.setEmail("academy_another_seller@gmail.com");
         anotherSeller.setFullName("Academy");
         anotherSeller.setBrandName("Academy");
         anotherSeller.setCompanyName("Academy");
@@ -140,7 +140,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant1Seller1 = new InventoryUnit();
         variant1Seller1.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant1Seller1.setSellerId(GlobalData.SELLER_ID);
+        variant1Seller1.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdf");
         variant1Seller1.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218153");
         variant1Seller1.setQuantity(10L);
         variant1Seller1.setUnitPrice(BigDecimal.valueOf(100000));
@@ -148,7 +148,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant1Seller2 = new InventoryUnit();
         variant1Seller2.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant1Seller2.setSellerId(GlobalData.SELLER2_ID);
+        variant1Seller2.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdg");
         variant1Seller2.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218153");
         variant1Seller2.setQuantity(10L);
         variant1Seller2.setUnitPrice(BigDecimal.valueOf(100020));
@@ -156,7 +156,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant2Seller1 = new InventoryUnit();
         variant2Seller1.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant2Seller1.setSellerId(GlobalData.SELLER_ID);
+        variant2Seller1.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdf");
         variant2Seller1.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218154");
         variant2Seller1.setQuantity(0L);
         variant2Seller1.setUnitPrice(BigDecimal.valueOf(100000));
@@ -164,7 +164,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant2Seller2 = new InventoryUnit();
         variant2Seller2.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant2Seller2.setSellerId(GlobalData.SELLER2_ID);
+        variant2Seller2.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdg");
         variant2Seller2.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218154");
         variant2Seller2.setQuantity(10L);
         variant2Seller2.setUnitPrice(BigDecimal.valueOf(100020));
@@ -172,7 +172,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant3Seller1 = new InventoryUnit();
         variant3Seller1.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant3Seller1.setSellerId(GlobalData.SELLER_ID);
+        variant3Seller1.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdf");
         variant3Seller1.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218155");
         variant3Seller1.setQuantity(10L);
         variant3Seller1.setUnitPrice(BigDecimal.valueOf(100000));
@@ -180,7 +180,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         InventoryUnit variant3Seller2 = new InventoryUnit();
         variant3Seller2.setProductId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
-        variant3Seller2.setSellerId(GlobalData.SELLER2_ID);
+        variant3Seller2.setSellerId("48341c45-9ded-4c4e-b2f7-bf85ff61acdg");
         variant3Seller2.setVariantId("vari-f8dfbd8e-8390-427f-9c48-ab251b218155");
         variant3Seller2.setQuantity(10L);
         variant3Seller2.setUnitPrice(BigDecimal.valueOf(100020));

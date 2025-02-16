@@ -1,4 +1,52 @@
 services:
+    mysql-authentication:
+        container_name: mysql-authentication
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: <MY_SQL_PASSWORD>
+            MYSQL_DATABASE: authentication
+        volumes:
+            -   mysql_db_authentication:/var/lib/mysql_authentication
+    mysql-user-management:
+        container_name: mysql-user-management
+        image: mysql:latest
+        ports:
+            - "3307:3306"
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: <MY_SQL_PASSWORD>
+            MYSQL_DATABASE: user-management
+        volumes:
+            - mysql_db_user-management:/var/lib/mysql_user-management
+    mysql-order-inventory:
+        container_name: mysql-order-inventory
+        image: mysql:latest
+        ports:
+            - "3308:3306"
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: <MY_SQL_PASSWORD>
+            MYSQL_DATABASE: order-inventory
+        volumes:
+            - mysql_db_order-inventory:/var/lib/mysql_order-inventory
+    mysql-payment-management:
+        container_name: mysql-payment-management
+        image: mysql:latest
+        ports:
+            - "3309:3306"
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: <MY_SQL_PASSWORD>
+            MYSQL_DATABASE: payment-management
+        volumes:
+            - mysql_db_payment-management:/var/lib/mysql_payment-management
     zookeeper:
         image: wurstmeister/zookeeper
         container_name: zookeeper
@@ -26,7 +74,7 @@ services:
             - "27017:27017"
 #        environment:
 #            MONGO_INITDB_ROOT_USERNAME: root
-#            MONGO_INITDB_ROOT_PASSWORD: <MONGO_PASSWORD>
+#            MONGO_INITDB_ROOT_PASSWORD: SuryaMongo@123
         volumes:
             -   mongo_db:/var/lib/mongo
             
@@ -58,6 +106,9 @@ services:
             -   elasticsearch
         
 volumes:
-    mysql_db:
     mongo_db:
     es-data:
+    mysql_db_authentication:
+    mysql_db_user-management:
+    mysql_db_order-inventory:
+    mysql_db_payment-management:

@@ -10,7 +10,11 @@ server:
     port: 8081
 spring:
     datasource:
-        url: jdbc:h2:mem:${spring.application.name}
-        driver-class-name: org.h2.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/user-management
         username: root
         password: <DATABASE_PASSWORD>
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLDialect
+        hibernate:
+            ddl-auto: create

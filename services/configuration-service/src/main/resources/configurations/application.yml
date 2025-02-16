@@ -61,11 +61,9 @@ spring:
             bootstrap-servers: ${application.kafka.host}
     jpa:
         generate-ddl: true
+        show-sql: true
         hibernate:
             ddl-auto: create
-    h2:
-        console:
-            enabled: true
 debug: true
 logging:
     level:
