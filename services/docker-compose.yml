@@ -104,6 +104,13 @@ services:
             -   ./kibana.yml:/var/lib/kibana/config/kibana.yml
         depends_on:
             -   elasticsearch
+    zipkin:
+        container_name: zipkin
+        image: openzipkin/zipkin
+        ports:
+            -   "9411:9411"
+        volumes:
+            -   zipkin-data:/var/lib/zipkin/data
         
 volumes:
     mongo_db:
@@ -112,3 +119,4 @@ volumes:
     mysql_db_user-management:
     mysql_db_order-inventory:
     mysql_db_payment-management:
+    zipkin-data:
