@@ -47,7 +47,7 @@ public class EmployeeApprovalManager implements IUserApprovalManager {
             approvalRequest.setTopic(employeeApprovalTopic);
             approvalRequest.setTitle("Employee Approval");
             approvalRequest.setData(employee);
-            approvalRequest.setApprovers(List.of(GlobalData.EMPLOYEE_MANAGER_ID, GlobalData.HR_MANAGER_ID, GlobalData.ADMIN_ID));
+            approvalRequest.setApprovers(List.of(GlobalData.HR_MANAGER_ID, GlobalData.HR_MANAGER_ID, GlobalData.ADMIN_ID));
             approvalRequest.setActionType(ActionType.CREATE);
             ApprovalResponseDto responseDto = approvalManagementServiceClient.registerUserForApproval(approvalRequest);
             if(responseDto.getResponseStatus() == ResponseStatus.SUCCESS)

@@ -51,8 +51,9 @@ public class AuthenticationService implements IAuthenticationService {
         User user = this.userRepository.findByEmailAndUserType(requestDto.getEmail(), requestDto.getUserType()).orElseThrow(() -> new UserNotFoundException(requestDto.getEmail(), requestDto.getUserType()));
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getId(), requestDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = tokenService.generateToken(authentication.getName());
         logger.trace("User '{}' logged in successfully!!!", requestDto.getEmail());
-        return tokenService.generateToken(authentication.getName());
+        return token;
     }
 
     @Override

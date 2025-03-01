@@ -37,7 +37,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         // Creating Category
         Category category = new Category();
-        category.setId("cate-f8dfbd8e-8390-427f-9c48-ab251b218153");
+        category.setId(GlobalData.CATEGORY_ID);
         category.setEntityState(ApprovalStatus.APPROVED);
         category.setCategoryName("Mobile Phones");
         category.setCategoryDescription("Mobile Phones");
@@ -49,14 +49,17 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         attributes.add(Attribute.builder().name("Front Camera Resolution").dataType(DataType.STRING).build());
         attributes.add(Attribute.builder().name("Back Camera Resolution").dataType(DataType.STRING).build());
         attributes.add(Attribute.builder().name("Battery Capacity").dataType(DataType.STRING).build());
-        attributes.add(Attribute.builder().name("RAM Size").dataType(DataType.STRING).build());
-        attributes.add(Attribute.builder().name("Storage Capacity").dataType(DataType.STRING).build());
         attributes.add(Attribute.builder().name("Warranty").dataType(DataType.STRING).build());
         attributes.add(Attribute.builder().name("Screen Resolution").dataType(DataType.STRING).build());
-        attributes.add(Attribute.builder().name("Color").dataType(DataType.STRING).build());
         attributes.add(Attribute.builder().name("In-Box Items").dataType(DataType.LIST).build());
         attributes.add(Attribute.builder().name("Made In India").dataType(DataType.BOOLEAN).build());
         category.setAttributes(attributes);
+        List<Attribute> cateVariantAttributes = new ArrayList<>();
+        cateVariantAttributes.add(Attribute.builder().name("RAM Size").dataType(DataType.STRING).build());
+        cateVariantAttributes.add(Attribute.builder().name("Storage Capacity").dataType(DataType.STRING).build());
+        cateVariantAttributes.add(Attribute.builder().name("Color").dataType(DataType.STRING).build());
+        category.setVariantAttributes(cateVariantAttributes);
+
         categoryRepository.save(category);
 
         Product product = new Product();
@@ -65,7 +68,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         product.setName("iPhone");
         product.setDescription("Apple IPhone");
         product.setImage(List.of());
-        product.setId("prod-f8dfbd8e-8390-427f-9c48-ab251b218153");
+        product.setId(GlobalData.PRODUCT_ID);
         product.setCompany("Academy Group Inc.");
         product.setDimensionalMetrics(new DimensionalMetrics());
         product.setBrandName("Academy");
@@ -88,7 +91,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         variantRepository.deleteAll();
 
         Variant variant = new Variant();
-        variant.setId("vari-f8dfbd8e-8390-427f-9c48-ab251b218153");
+        variant.setId(GlobalData.VARIANT1_ID);
         variant.setApprovalStatus(ApprovalStatus.APPROVED);
         variant.setProduct(product);
         List<Attribute> variantAttributes = new ArrayList<>();
@@ -99,7 +102,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         variantRepository.save(variant);
 
         Variant variant2 = new Variant();
-        variant2.setId("vari-f8dfbd8e-8390-427f-9c48-ab251b218154");
+        variant2.setId(GlobalData.VARIANT2_ID);
         variant2.setApprovalStatus(ApprovalStatus.APPROVED);
         variant2.setProduct(product);
         List<Attribute> variant2Attributes = new ArrayList<>();
@@ -110,7 +113,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         variantRepository.save(variant2);
 
         Variant variant3 = new Variant();
-        variant3.setId("vari-f8dfbd8e-8390-427f-9c48-ab251b218154");
+        variant3.setId(GlobalData.VARIANT3_ID);
         variant3.setApprovalStatus(ApprovalStatus.APPROVED);
         variant3.setProduct(product);
         List<Attribute> variant3Attributes = new ArrayList<>();

@@ -4,6 +4,7 @@ import com.academy.projects.ecommerce.productonboardingservice.configurations.Id
 import com.academy.projects.ecommerce.productonboardingservice.dtos.ActionType;
 import com.academy.projects.ecommerce.productonboardingservice.dtos.InternalResponseDto;
 import com.academy.projects.ecommerce.productonboardingservice.exceptions.AttributeNotProvidedException;
+import com.academy.projects.ecommerce.productonboardingservice.exceptions.ProductNotApprovedException;
 import com.academy.projects.ecommerce.productonboardingservice.exceptions.VariantNotFoundException;
 import com.academy.projects.ecommerce.productonboardingservice.models.*;
 import com.academy.projects.ecommerce.productonboardingservice.repositories.VariantRepository;
@@ -43,6 +44,7 @@ public class VariantService implements IVariantService {
         try {
             Variant variant = new Variant();
             Product product = this.productService.getProduct(productId);
+            if(!product.getApprovalStatus().equals(ApprovalStatus.APPROVED)) throw new ProductNotApprovedException(product.getId());
             List<Attribute> expectedAttributes = product.getCategory().getVariantAttributes();
             List<Attribute> attributes = this.analyseAttributes(expectedAttributes, variantAttributes);
             variant.setProduct(product);
@@ -54,11 +56,11 @@ public class VariantService implements IVariantService {
             String approvalRequestId = this.variantApprovalManager.register(variant, ActionType.CREATE);
 
             // Send notification with approval request details
-            logger.info("Product Approval Request Id: {}", approvalRequestId);
+            logger.info("Variant Approval Request Id: {}", approvalRequestId);
 
 
             variant = variantRepository.save(variant);
-            responseDto.setMessage("Variant added successfully!!!");
+            responseDto.setMessage("Variant added successfully with id '" + variant.getId() + "'!!! Track the approval status using id '" + approvalRequestId + "'");
             responseDto.setResponseStatus(InternalResponseStatus.SUCCESS);
             responseDto.setRespondedAt(variant.getCreatedAt());
             responseDto.setId(variant.getId());
@@ -71,6 +73,7 @@ public class VariantService implements IVariantService {
     }
 
     private List<Attribute> analyseAttributes(List<Attribute> expectedAttributes, List<Attribute> actualAttributes) {
+        if(expectedAttributes == null) return List.of();
         List<Attribute> attributes = new ArrayList<>();
         for(Attribute expectedAttribute : expectedAttributes) {
             boolean found = false;

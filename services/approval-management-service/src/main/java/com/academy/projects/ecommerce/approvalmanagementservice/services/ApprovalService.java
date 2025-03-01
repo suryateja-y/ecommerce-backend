@@ -271,8 +271,6 @@ public class ApprovalService implements IApprovalService {
     private void approvedByApprover(UpdateStatusRequestDto requestDto, ApprovalRequest approvalRequest, String approver) {
         int approverIndex = approvalRequest.getApprovers().indexOf(approver);
         ApprovalStatus status = ApprovalStatus.NEED_FURTHER_APPROVAL;
-        // Remove this line in future
-        if(approverIndex == -1) approverIndex = approvalRequest.getApprovers().size() - 1;
         if(approverIndex == approvalRequest.getApprovers().size() - 1) status = ApprovalStatus.APPROVED;
 
         Action action = Action.builder()

@@ -1,6 +1,7 @@
 package com.academy.projects.ecommerce.authenticationservice.starters;
 
 import com.academy.projects.ecommerce.authenticationservice.models.*;
+import com.academy.projects.ecommerce.authenticationservice.repositories.authentication.TokenRepository;
 import com.academy.projects.ecommerce.authenticationservice.repositories.authentication.UserRepository;
 import com.academy.projects.ecommerce.authenticationservice.repositories.authorization.PermissionRepository;
 import com.academy.projects.ecommerce.authenticationservice.repositories.authorization.RoleRepository;
@@ -26,13 +27,15 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
+    private final TokenRepository tokenRepository;
 
     @Autowired
-    public InitializeData(final PasswordEncoder passwordEncoder, final UserRepository userRepository, PermissionRepository permissionRepository, RoleRepository roleRepository) {
+    public InitializeData(final PasswordEncoder passwordEncoder, final UserRepository userRepository, PermissionRepository permissionRepository, RoleRepository roleRepository, TokenRepository tokenRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
+        this.tokenRepository = tokenRepository;
     }
 
     @SuppressWarnings({"NullableProblems", "DuplicatedCode"})
@@ -40,6 +43,12 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (alreadySetup) return;
+
+        // Clear all repositories
+        userRepository.deleteAll();
+        permissionRepository.deleteAll();
+        roleRepository.deleteAll();
+        tokenRepository.deleteAll();
 
         // Permissions for USER role
         // Creating UPDATE_USER permission
@@ -137,6 +146,26 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         seller.setUserState(UserState.APPROVED);
         this.userRepository.save(seller);
 
+        // Seller - 2 user
+        User seller2 = new User();
+        seller2.setId(GlobalData.SELLER2_ID);
+        seller2.setEmail(GlobalData.SELLER2_EMAIL);
+        seller2.setPassword(passwordEncoder.encode(userPassword));
+        seller2.setUserType(UserType.SELLER);
+        seller2.setRoles(Set.of(userRole, sellerRole));
+        seller2.setUserState(UserState.APPROVED);
+        this.userRepository.save(seller2);
+
+        // Seller - 3 user
+        User seller3 = new User();
+        seller3.setId(GlobalData.SELLER3_ID);
+        seller3.setEmail(GlobalData.SELLER3_EMAIL);
+        seller3.setPassword(passwordEncoder.encode(userPassword));
+        seller3.setUserType(UserType.SELLER);
+        seller3.setRoles(Set.of(userRole, sellerRole));
+        seller3.setUserState(UserState.APPROVED);
+        this.userRepository.save(seller3);
+
         // Customer user
         User customer = new User();
         customer.setId(GlobalData.CUSTOMER_ID);
@@ -196,6 +225,16 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         hrManager.setRoles(Set.of(userRole, employeeRole, employeeManagerRole));
         hrManager.setUserState(UserState.APPROVED);
         this.userRepository.save(hrManager);
+
+        // Customer Manager User
+        User customerManager = new User();
+        customerManager.setId(GlobalData.CUSTOMER_MANAGER_ID);
+        customerManager.setEmail(GlobalData.CUSTOMER_MANAGER_EMAIL);
+        customerManager.setPassword(passwordEncoder.encode(userPassword));
+        customerManager.setUserType(UserType.EMPLOYEE);
+        customerManager.setRoles(Set.of(userRole, employeeRole, customerManagerRole));
+        customerManager.setUserState(UserState.APPROVED);
+        this.userRepository.save(customerManager);
 
         alreadySetup = true;
     }

@@ -4,6 +4,9 @@ application:
     kafka:
         consumer:
             user-update-group: user-update-approval-group-1
+    security:
+        allow:
+            specific: /api/${application.version}/approvals/register
 spring:
     data:
         mongodb:
