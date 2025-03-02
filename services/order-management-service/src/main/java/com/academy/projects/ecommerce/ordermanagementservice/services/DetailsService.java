@@ -65,7 +65,7 @@ public class DetailsService implements IDetailsService {
 
     private Address getSellerAddress(String sellerId) {
         try {
-            return userManagementServiceClient.getAddress(sellerId);
+            return userManagementServiceClient.getSellerAddress(sellerId);
         } catch (Exception e) {
             throw new SellerNotFoundException(sellerId, e.getMessage());
         }

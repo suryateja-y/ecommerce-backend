@@ -7,48 +7,54 @@ spring:
                 locator:
                     enabled: true
             routes:
-                - id: authentication-service
-                  uri: lb://AUTHENTICATION-SERVICE
-                  predicates:
-                      - Path=/api/v1/authentication/**
-                  filters:
-                      - Authenticate
-                - id: authentication-service
-                  uri: lb://AUTHENTICATION-SERVICE
-                  predicates:
-                      - Path=/api/v1/authorization/**
-                  filters:
-                      - Authenticate
-                - id: user-management-service
-                  uri: lb://USER-MANAGEMENT-SERVICE
-                  predicates:
-                      - Path=/api/v1/users/**
-                  filters:
-                      - Authenticate
-                - id: product-onboarding-service
-                  uri: lb://PRODUCT-ONBOARDING-SERVICE
-                  predicates:
+                -   id: authentication-service
+                    uri: lb://AUTHENTICATION-SERVICE
+                    predicates:
+                        - Path=/api/v1/authentication/**
+                    filters:
+                        - Authenticate
+                -   id: authentication-service
+                    uri: lb://AUTHENTICATION-SERVICE
+                    predicates:
+                        - Path=/api/v1/authorization/**
+                    filters:
+                        - Authenticate
+                -   id: user-management-service
+                    uri: lb://USER-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/users/**
+                    filters:
+                        - Authenticate
+                -   id: product-onboarding-service
+                    uri: lb://PRODUCT-ONBOARDING-SERVICE
+                    predicates:
                       - Path=/api/v1/product-onboardings/**
-                  filters:
-                      - Authenticate
-                - id: approval-management-service
-                  uri: lb://APPROVAL-MANAGEMENT-SERVICE
-                  predicates:
-                      - Path=/api/v1/approvals/**
-                  filters:
-                      - Authenticate
-                - id: product-service
-                  uri: lb://PRODUCT-SERVICE
-                  predicates:
-                      - Path=/api/v1/products/**
-                  filters:
-                      - Authenticate
-                - id: product-search-service
-                  uri:  lb://PRODUCT-SEARCH-SERVICE
-                  predicates:
-                      - Path=/api/v1/product-search/**
-                  filters:
-                      - Authenticate
+                    filters:
+                        - Authenticate
+                -   id: approval-management-service
+                    uri: lb://APPROVAL-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/approvals/**
+                    filters:
+                        - Authenticate
+                -   id: product-service
+                    uri: lb://PRODUCT-SERVICE
+                    predicates:
+                        - Path=/api/v1/products/**
+                    filters:
+                        - Authenticate
+                -   id: product-search-service
+                    uri:  lb://PRODUCT-SEARCH-SERVICE
+                    predicates:
+                        - Path=/api/v1/product-search/**
+                    filters:
+                        - Authenticate
+                -   id: product-search-service
+                    uri: lb://PRODUCT-SEARCH-SERVICE
+                    predicates:
+                        - Path=/api/v1/delivery-details/**
+                    filters:
+                        - Authenticate
                 -   id: order-management-service
                     uri: lb://ORDER-MANAGEMENT-SERVICE
                     predicates:

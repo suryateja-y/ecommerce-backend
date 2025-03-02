@@ -8,4 +8,5 @@ import java.util.List;
 public interface IInventoryService {
     InventoryUnit add(InventoryUnitDto inventoryUnitDto);
     List<InventoryUnit> getAll(String productId, String variantId);
+    InventoryUnit get(String variantId, String sellerId);
 }

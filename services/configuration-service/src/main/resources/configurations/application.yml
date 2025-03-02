@@ -13,10 +13,12 @@ application:
         approval-management-service: approval-management-service
         product-management-service: product-management-service
         authentication-service: authentication-service
+        product-search-service: product-search-service
     kafka:
         host: localhost:9092
         topics:
             order-topic: order
+            pre-order-topic: order
             user-update-topic: user-update
             approval-notification-topic: approval-notification
             inventory-update-topic: inventory-update

@@ -43,8 +43,6 @@ public class PaymentService implements IPaymentService {
         PaymentGatewayResponse gatewayResponse = paymentGateway.initiatePayment(paymentInitiationRequest);
         Payment payment = paymentRepository.save(from(gatewayResponse, paymentInitiationRequest));
         logger.info("Payment successfully initiated for order: '{}'!", payment.getOrderId());
-        // Send mail to the user and the Order and Payment manager
-        paymentUpdateManager.sendUpdate(payment, Action.CREATE);
         return payment;
     }
 
@@ -95,9 +93,6 @@ public class PaymentService implements IPaymentService {
         if(response.getActionStatus().equals(ActionStatus.SUCCESS)) {
             payment = paymentRepository.save(payment);
             payment.setModifiedAt(response.getActedAt());
-
-            // Sending update to Kafka
-            paymentUpdateManager.sendUpdate(payment, Action.STATUS_UPDATE);
             return payment;
         } else throw new CancellationFailedException(payment.getPaymentId(), response.getReason());
     }
@@ -118,8 +113,6 @@ public class PaymentService implements IPaymentService {
             payment.setModifiedAt(new Date());
             payment.setReason(reason);
             payment = paymentRepository.save(payment);
-            // Sending update to Kafka
-            paymentUpdateManager.sendUpdate(payment, Action.STATUS_UPDATE);
             return payment;
         } else throw new RefundFailedException(payment.getPaymentId(), response.getReason());
 

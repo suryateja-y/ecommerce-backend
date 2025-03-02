@@ -9,7 +9,7 @@ application:
         webhook-secret: <STRIPE_WEBHOOK_SECRET_KEY>
     kafka:
         consumer:
-            order-group: order-payment-group-1
+            pre-order-group: order-payment-group-1
     security:
         allow:
             specific: /api/${application.version}/webhooks

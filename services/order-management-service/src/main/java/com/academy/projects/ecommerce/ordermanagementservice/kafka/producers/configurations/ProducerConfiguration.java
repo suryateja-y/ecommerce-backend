@@ -2,6 +2,7 @@ package com.academy.projects.ecommerce.ordermanagementservice.kafka.producers.co
 
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.InventoryUnitDto;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.OrderDto;
+import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.PreOrderDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,16 @@ public class ProducerConfiguration {
     @Bean
     public KafkaTemplate<String, OrderDto> kafkaTemplate() {
         return new KafkaTemplate<>(orderFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, PreOrderDto> preOrderFactory() {
+        return new DefaultKafkaProducerFactory<>(configProperties());
+    }
+
+    @Bean
+    public KafkaTemplate<String, PreOrderDto> preOrderKafkaTemplate() {
+        return new KafkaTemplate<>(preOrderFactory());
     }
 
     @Bean

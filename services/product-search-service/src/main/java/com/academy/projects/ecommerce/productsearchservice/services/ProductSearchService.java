@@ -6,6 +6,7 @@ import co.elastic.clients.elasticsearch.indices.AnalyzeRequest;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
 import com.academy.projects.ecommerce.productsearchservice.dtos.DeliveryDetails;
+import com.academy.projects.ecommerce.productsearchservice.dtos.DeliveryFeasibilityDetails;
 import com.academy.projects.ecommerce.productsearchservice.dtos.ProductFilters;
 import com.academy.projects.ecommerce.productsearchservice.dtos.ProductSearchDto;
 import com.academy.projects.ecommerce.productsearchservice.exceptions.AddressNotProvidedException;
@@ -34,16 +35,16 @@ public class ProductSearchService implements IProductSearchService {
     private final ElasticsearchClient elasticsearchClient;
     private final ElasticsearchOperations elasticsearchOperations;
     private final IInventoryService inventoryService;
-    private final ISellerService sellerService;
+    private final IETAService etaService;
 
     private final Logger logger = LoggerFactory.getLogger(ProductSearchService.class);
 
     @Autowired
-    public ProductSearchService(ElasticsearchClient elasticsearchClient, ElasticsearchOperations elasticsearchOperations, IInventoryService inventoryService, ISellerService sellerService) {
+    public ProductSearchService(ElasticsearchClient elasticsearchClient, ElasticsearchOperations elasticsearchOperations, IInventoryService inventoryService, IETAService etaService) {
         this.elasticsearchClient = elasticsearchClient;
         this.elasticsearchOperations = elasticsearchOperations;
         this.inventoryService = inventoryService;
-        this.sellerService = sellerService;
+        this.etaService = etaService;
     }
     @Override
     public List<Product> search(ProductSearchDto searchDto, int page, int pageSize) {
@@ -94,24 +95,21 @@ public class ProductSearchService implements IProductSearchService {
     private DeliveryDetails getDetails(List<InventoryUnit> inventoryUnits, Address userAddress) {
         DeliveryDetails deliveryDetails = new DeliveryDetails();
         long etaInHours = Long.MAX_VALUE;
-        Seller foundSeller = null;
+        String foundSellerId = null;
         InventoryUnit foundInventoryUnit = null;
         for(InventoryUnit inventoryUnit : inventoryUnits) {
-            if(inventoryUnit.getQuantity() <= 0) continue;
-            Seller seller = sellerService.getBySellerId(inventoryUnit.getSellerId());
-            if(!seller.getAddress().getCountry().equalsIgnoreCase(userAddress.getCountry())) continue;
-            long calculatedEta = calculateEta(userAddress.getZip(), seller.getAddress().getZip());
-            if((calculatedEta > 0) && (calculatedEta < etaInHours)) {
-                etaInHours = calculatedEta;
-                foundSeller = seller;
+            DeliveryFeasibilityDetails deliveryFeasibilityDetails = etaService.checkFeasibilityAndETA(inventoryUnit, userAddress);
+            if((deliveryFeasibilityDetails.getEtaInHours() > 0) && (deliveryFeasibilityDetails.getEtaInHours() < etaInHours)) {
+                etaInHours = deliveryFeasibilityDetails.getEtaInHours();
+                foundSellerId = deliveryFeasibilityDetails.getSellerId();
                 foundInventoryUnit = inventoryUnit;
             }
         }
-        if(foundSeller != null) {
+        if(foundSellerId != null) {
             deliveryDetails.setInStock(true);
             deliveryDetails.setEta(from(etaInHours));
             deliveryDetails.setPrice(foundInventoryUnit.getUnitPrice());
-            deliveryDetails.setSellerId(foundSeller.getSellerId());
+            deliveryDetails.setSellerId(foundSellerId);
         }
         return deliveryDetails;
     }
@@ -120,29 +118,6 @@ public class ProductSearchService implements IProductSearchService {
         Date current = new Date();
         current.setTime(current.getTime() + (etaInHours * 60 * 60 * 1000));
         return current;
-    }
-
-    private long calculateEta(String userZipCode, String sellerZipCode) {
-        try {
-            int[] hours = { 3, 6, 12, 18, 24, 48 };
-            long userZip = Long.parseLong(userZipCode);
-            long sellerZip = Long.parseLong(sellerZipCode);
-            long difference = Math.abs(userZip - sellerZip);
-            int index = 0;
-            long calculatedEta = 0;
-            while(difference > 0) {
-                long digit = difference % 10;
-                calculatedEta += (hours[index] * digit);
-                difference = difference / 10;
-                index++;
-            }
-            if(calculatedEta < 24)
-                calculatedEta = 24;
-            return calculatedEta;
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return 0;
-        }
     }
 
     private NativeQuery getQuery(String query, ProductFilters filters, Pageable pageable) {

@@ -29,16 +29,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("")
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public ResponseEntity<CreateOrderResponseDto> checkout(Authentication authentication) {
-        Order order = orderService.checkout(authentication.getName());
-        CreateOrderResponseDto responseDto = new CreateOrderResponseDto();
-        responseDto.setOrderId(order.getId());
-        responseDto.setOrderStatus(order.getOrderStatus());
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-    }
-
     @GetMapping("/{customerId}")
     @PreAuthorize("hasAnyRole('ROLE_ORDER_MANAGER', 'ROLE_ADMIN') or ( hasRole('ROLE_CUSTOMER') and @accessChecker.isOwner(#customerId) )")
     public ResponseEntity<List<Order>> getOrders(@PathVariable String customerId, @RequestParam(required = false) OrderStatus orderStatus, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int pageSize) {

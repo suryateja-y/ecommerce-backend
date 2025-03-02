@@ -1,4 +1,4 @@
-package com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos;
+package com.academy.projects.ecommerce.productsearchservice.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,13 +12,9 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItem implements Serializable {
-    private String id;
-    private String productId;
-    private String productName;
+public class DeliveryFeasibilityItem implements Serializable {
     private String variantId;
     private String sellerId;
-    private Long quantity;
+    private int quantity;
     private BigDecimal unitPrice;
-    private BigDecimal totalPrice;
 }

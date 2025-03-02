@@ -12,14 +12,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDto implements Serializable {
-    private String orderId;
+public class PreOrderDto implements Serializable {
     private String preOrderId;
-    private Date orderDate;
-    private Set<OrderItem> orderItems;
+    private Date preOrderDate;
+    private Set<PreOrderItem> preOrderItems;
     private String customerId;
     private BigDecimal totalAmount;
-    private OrderStatus orderStatus;
+    private PreOrderStatus orderStatus;
     private String invoiceId;
     private Action action;
 }

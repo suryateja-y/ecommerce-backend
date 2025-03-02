@@ -1,6 +1,7 @@
 package com.academy.projects.ecommerce.paymentmanagementservice.services;
 
 import com.academy.projects.ecommerce.paymentmanagementservice.dtos.*;
+import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.PreOrderItem;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
@@ -9,7 +10,6 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.PaymentIntentCancelParams;
 import com.stripe.param.RefundCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.OrderItem;
 import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.PaymentGatewayResponse;
 import com.academy.projects.ecommerce.paymentmanagementservice.models.PaymentStatus;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class StripePaymentGateway implements IPaymentGateway {
 
         // Line items
         List<SessionCreateParams.LineItem> lineItems = new LinkedList<>();
-        for(OrderItem orderItem : paymentInitiationRequest.getOrderItems())
+        for(PreOrderItem orderItem : paymentInitiationRequest.getOrderItems())
             lineItems.add(createLineItem(orderItem));
 
         Session session;
@@ -113,7 +113,7 @@ public class StripePaymentGateway implements IPaymentGateway {
         return new Date(seconds * 1000);
     }
 
-    private SessionCreateParams.LineItem createLineItem(OrderItem orderItem) {
+    private SessionCreateParams.LineItem createLineItem(PreOrderItem orderItem) {
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
                 .setName(orderItem.getProductName())
                 .setDescription(orderItem.getProductName())

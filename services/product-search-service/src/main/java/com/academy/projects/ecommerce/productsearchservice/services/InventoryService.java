@@ -67,6 +67,11 @@ public class InventoryService implements IInventoryService {
         return inventoryRepository.findAllByProductIdAndVariantId(productId, variantId);
     }
 
+    @Override
+    public InventoryUnit get(String variantId, String sellerId) {
+        return inventoryRepository.findByVariantIdAndSellerId(variantId, sellerId).orElse(null);
+    }
+
     private InventoryUnit get(InventoryUnitContainer inventoryUnitContainer) {
         InventoryUnit inventoryUnit = new InventoryUnit();
         inventoryUnit.setInventoryId(inventoryUnitContainer.getId());

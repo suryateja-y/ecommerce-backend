@@ -1,6 +1,7 @@
 package com.academy.projects.ecommerce.paymentmanagementservice.kafka.consumer.configurations;
 
 import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.OrderDto;
+import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.PreOrderDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,21 @@ public class ConsumerConfiguration {
     private String bootstrapServers;
 
     @Bean
+    public ConsumerFactory<String, PreOrderDto> preOrderConsumerFactory() {
+        JsonDeserializer<PreOrderDto> jsonDeserializer = new JsonDeserializer<>(PreOrderDto.class);
+        jsonDeserializer.addTrustedPackages("com/academy/projects/ecommerce/paymentmanagementservice/kafka/dtos/PreOrderDto");
+        return new DefaultKafkaConsumerFactory<>(configurationProperties(jsonDeserializer), new StringDeserializer(), jsonDeserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, PreOrderDto> kafkaListenerContainerFactoryForPreOrder() {
+        ConcurrentKafkaListenerContainerFactory<String, PreOrderDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(preOrderConsumerFactory());
+        return factory;
+    }
+    @Bean
     public ConsumerFactory<String, OrderDto> orderConsumerFactory() {
         JsonDeserializer<OrderDto> jsonDeserializer = new JsonDeserializer<>(OrderDto.class);
-        jsonDeserializer.setRemoveTypeHeaders(false);
         jsonDeserializer.addTrustedPackages("com/academy/projects/ecommerce/paymentmanagementservice/kafka/dtos/OrderDto");
         return new DefaultKafkaConsumerFactory<>(configurationProperties(jsonDeserializer), new StringDeserializer(), jsonDeserializer);
     }
@@ -39,7 +52,7 @@ public class ConsumerConfiguration {
 
     private Map<String, Object> configurationProperties(JsonDeserializer<?> jsonDeserializer) {
         jsonDeserializer.setUseTypeMapperForKey(true);
-
+        jsonDeserializer.setRemoveTypeHeaders(false);
         Map<String, Object> configurationProperties = new HashMap<>();
         configurationProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configurationProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

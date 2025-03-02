@@ -1,9 +1,6 @@
 package com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,7 +9,8 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItem implements Serializable {
+@Builder
+public class PreOrderItem implements Serializable {
     private String id;
     private String productId;
     private String productName;

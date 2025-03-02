@@ -1,6 +1,6 @@
 package com.academy.projects.ecommerce.paymentmanagementservice.dtos;
 
-import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.OrderItem;
+import com.academy.projects.ecommerce.paymentmanagementservice.kafka.dtos.PreOrderItem;
 import lombok.*;
 
 import java.io.Serializable;
@@ -15,6 +15,6 @@ import java.util.Set;
 public class PaymentInitiationRequest implements Serializable {
     private String orderId;
     private String customerId;
-    private Set<OrderItem> orderItems;
+    private Set<PreOrderItem> orderItems;
     private BigDecimal totalAmount;
 }
