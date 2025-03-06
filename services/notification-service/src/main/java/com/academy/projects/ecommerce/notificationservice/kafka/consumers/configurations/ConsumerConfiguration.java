@@ -176,6 +176,20 @@ public class ConsumerConfiguration {
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, TrackingDto> trackingConsumerFactory() {
+        JsonDeserializer<TrackingDto> jsonDeserializer = new JsonDeserializer<>(TrackingDto.class);
+        jsonDeserializer.addTrustedPackages("com/academy/projects/ecommerce/notificationservice/kafka/dtos/TrackingDto");
+        return new DefaultKafkaConsumerFactory<>(configurationProperties(jsonDeserializer), new StringDeserializer(), jsonDeserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, TrackingDto> kafkaListenerContainerFactoryForTracking() {
+        ConcurrentKafkaListenerContainerFactory<String, TrackingDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(trackingConsumerFactory());
+        return factory;
+    }
+
     private Map<String, Object> configurationProperties(JsonDeserializer<?> jsonDeserializer) {
         jsonDeserializer.setUseTypeMapperForKey(true);
         jsonDeserializer.setRemoveTypeHeaders(false);

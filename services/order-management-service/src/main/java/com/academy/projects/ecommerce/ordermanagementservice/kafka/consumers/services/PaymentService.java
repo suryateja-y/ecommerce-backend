@@ -6,7 +6,6 @@ import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Payment;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.PaymentDto;
 import com.academy.projects.ecommerce.ordermanagementservice.models.Order;
 import com.academy.projects.ecommerce.ordermanagementservice.models.PaymentDetails;
-import com.academy.projects.ecommerce.ordermanagementservice.models.PaymentStatus;
 import com.academy.projects.ecommerce.ordermanagementservice.models.PreOrder;
 import com.academy.projects.ecommerce.ordermanagementservice.services.IOrderService;
 import com.academy.projects.ecommerce.ordermanagementservice.services.IPreOrderService;
@@ -35,9 +34,10 @@ public class PaymentService {
             if(paymentDto.getAction().equals(Action.CREATE)) {
                 PreOrder preOrder = preOrderService.update(from(paymentDto.getPayment()));
                 logger.info("Pre Order updated: '{}'!!!", preOrder.getId());
-            } else if(paymentDto.getAction().equals(Action.STATUS_UPDATE) && paymentDto.getPayment().getPaymentStatus().equals(PaymentStatus.REFUND)) {
-                Order order = orderService.updateStatus(paymentDto.getPayment().getCustomerId(), paymentDto.getPayment().getOrderId(), paymentDto.getPayment().getPaymentStatus());
-                logger.info("Order updated: '{}'!!!", order.getId());
+            } else {
+                Order order = orderService.updatePayment(paymentDto);
+                if(order != null)
+                    logger.info("Order: '{}' Payment Details updated!!!", order.getId());
             }
         } catch(Exception e) {
             throw new RuntimeException(e);

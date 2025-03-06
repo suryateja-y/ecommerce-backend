@@ -56,7 +56,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         admin.setBloodGroup("O+");
         admin.setGender(Gender.MALE);
         admin.setDesignation("CEO");
-        admin.setEmployeeId(GlobalData.ADMIN_ID);
+        admin.setEmployeeId(GlobalData.ADMIN_EMPLOYEE_ID);
         employeeRepository.save(admin);
 
         // Creating Seller
@@ -283,6 +283,46 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         customerManager.setDesignation("Customer Manager");
         customerManager.setEmployeeId("Emp-06");
         employeeRepository.save(customerManager);
+
+        // Logistics Executive
+        Employee logisticsExecutive = new Employee();
+        User logisticsExecutiveUser = new User();
+        logisticsExecutiveUser.setId(GlobalData.LOGISTICS_EXECUTIVE_ID);
+        logisticsExecutiveUser.setEmail(GlobalData.LOGISTICS_EXECUTIVE_EMAIL);
+        logisticsExecutiveUser.setUserType(UserType.EMPLOYEE);
+        logisticsExecutiveUser.setUserState(UserState.APPROVED);
+        logisticsExecutiveUser.setFullName("Academy");
+        logisticsExecutiveUser.setPhoneNumber("+919999999999");
+        logisticsExecutiveUser = userRepository.save(logisticsExecutiveUser);
+
+        logisticsExecutive.setUser(logisticsExecutiveUser);
+        logisticsExecutive.setId(logisticsExecutiveUser.getId());
+        logisticsExecutive.setAge(30);
+        logisticsExecutive.setBloodGroup("O+");
+        logisticsExecutive.setGender(Gender.MALE);
+        logisticsExecutive.setDesignation("Logistics Executive");
+        logisticsExecutive.setEmployeeId("Emp-07");
+        employeeRepository.save(logisticsExecutive);
+
+        // Tracking Manager
+        Employee trackingManager = new Employee();
+        User trackingManagerUser = new User();
+        trackingManagerUser.setId(GlobalData.TRACKING_MANAGER_ID);
+        trackingManagerUser.setEmail(GlobalData.TRACKING_MANAGER_EMAIL);
+        trackingManagerUser.setUserType(UserType.EMPLOYEE);
+        trackingManagerUser.setUserState(UserState.APPROVED);
+        trackingManagerUser.setFullName("Academy");
+        trackingManagerUser.setPhoneNumber("+919999999999");
+        trackingManagerUser = userRepository.save(trackingManagerUser);
+
+        trackingManager.setUser(trackingManagerUser);
+        trackingManager.setId(trackingManagerUser.getId());
+        trackingManager.setAge(30);
+        trackingManager.setBloodGroup("O+");
+        trackingManager.setGender(Gender.MALE);
+        trackingManager.setDesignation("Tracking Manager");
+        trackingManager.setEmployeeId("Emp-08");
+        employeeRepository.save(trackingManager);
 
         alreadySetup = true;
     }

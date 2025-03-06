@@ -3,6 +3,7 @@ application:
         consumer:
             payment-group: payment-order-group-1
             inventory-approval-group: inventory-approval-group-1
+            tracking-group: tracking-group-1
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver

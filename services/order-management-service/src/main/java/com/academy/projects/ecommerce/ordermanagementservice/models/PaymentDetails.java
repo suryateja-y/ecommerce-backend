@@ -28,4 +28,6 @@ public class PaymentDetails extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     private CurrencyType currencyType;
+
+    private String comment;
 }

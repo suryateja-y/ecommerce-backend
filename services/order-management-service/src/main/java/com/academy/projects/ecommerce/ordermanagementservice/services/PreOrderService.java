@@ -61,7 +61,7 @@ public class PreOrderService implements IPreOrderService {
         // Request Inventory Service to Block the Inventory
         inventoryService.block(orderItems);
 
-        PreOrder preOrder = createPreOrder(customerId, orderItems, feasibilityDetails);
+        PreOrder preOrder = createPreOrder(customerId, orderItems, feasibilityDetails, addressId);
 
         // Sending update to Kafka
         orderUpdateManager.sendUpdate(preOrder, Action.CREATE);
@@ -92,7 +92,7 @@ public class PreOrderService implements IPreOrderService {
                 inventoryService.releaseInventory(preOrder.getPreOrderItems());
 
                 // Sending Update to Kafka
-                orderUpdateManager.sendUpdate(preOrder, Action.CANCELLED);
+                orderUpdateManager.sendUpdate(preOrder, Action.CANCEL_REQUESTED);
             } else if(preOrder.getOrderStatus().equals(PreOrderStatus.CONVERTED)) {
                 preOrder = orderService.createOrders(preOrder);
                 // Send Order created notification to the user
@@ -120,13 +120,14 @@ public class PreOrderService implements IPreOrderService {
         };
     }
 
-    private PreOrder createPreOrder(String customerId, Set<OrderItem> orderItems, List<DeliveryFeasibilityDetails> feasibilityDetails) {
+    private PreOrder createPreOrder(String customerId, Set<OrderItem> orderItems, List<DeliveryFeasibilityDetails> feasibilityDetails, String addressId) {
         PreOrder preOrder = new PreOrder();
         preOrder.setCustomerId(customerId);
         preOrder.setPreOrderItems(from(orderItems, feasibilityDetails));
         preOrder.setOrders(new LinkedList<>());
         preOrder.setOrderStatus(PreOrderStatus.PENDING_FOR_PAYMENT);
         preOrder.setTotalAmount(getTotalAmount(orderItems));
+        preOrder.setShippingAddressId(addressId);
         return preOrderRepository.save(preOrder);
     }
 

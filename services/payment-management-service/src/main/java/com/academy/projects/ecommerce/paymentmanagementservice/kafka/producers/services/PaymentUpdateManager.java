@@ -20,6 +20,10 @@ public class PaymentUpdateManager {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    public void sendUpdate(PaymentDto paymentDto) {
+        kafkaTemplate.send(paymentTopic, paymentDto);
+    }
+
     public void sendUpdate(Payment payment, Action action) {
         PaymentDto paymentDto = PaymentDto.builder().payment(payment).action(action).build();
         kafkaTemplate.send(paymentTopic, paymentDto);

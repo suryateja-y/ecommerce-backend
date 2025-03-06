@@ -94,6 +94,11 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         // Inventory Management
         Permission manageInventory = this.createPermission("CRUD_INVENTORY", "This permission managing inventory");
 
+        // Tracking Management
+        Permission trackingUpdate = this.createPermission("TRACKING_UPDATE", "This permission allows user to add tracking step to the shipment");
+
+        Permission trackingCRUD = this.createPermission("TRACKING_CRUD", "This permission allows user to get, convert tracking requests");
+
         // Creating Roles
         // Creating ADMIN role
         Role adminRole = this.createRole("ADMIN", "Administrator (Access to everything)", Set.of(getUsersPermission, getAllRolesPermission, getAllPermissions, crudRolePermission, crudPermission, crudUserPermission, updateUserPermission, getUserPermission, getRolesPermission, manageCustomers, manageEmployees, manageSellers));
@@ -124,6 +129,12 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
 
         // Creating INVENTORY_MANAGER role
         Role inventoryManagerRole = this.createRole("INVENTORY_MANAGER", "Manager of the inventory", Set.of(manageInventory));
+
+        // Creating LOGISTICS_EXECUTIVE role
+        Role logisticsExecutiveRole = this.createRole("LOGISTICS_EXECUTIVE", "Logistics Executive sends the package to the next hop or destination", Set.of(trackingUpdate));
+
+        // Creating TRACKING_MANAGER role
+        Role trackingManagerRole = this.createRole("TRACKING_MANAGER", "Manages Tracking, converting requests and check the requests", Set.of(trackingCRUD));
 
         // Creating User
         // ADMIN user
@@ -235,6 +246,26 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         customerManager.setRoles(Set.of(userRole, employeeRole, customerManagerRole));
         customerManager.setUserState(UserState.APPROVED);
         this.userRepository.save(customerManager);
+
+        // Logistics Executive User
+        User logisticsExecutive = new User();
+        logisticsExecutive.setId(GlobalData.LOGISTICS_EXECUTIVE_ID);
+        logisticsExecutive.setEmail(GlobalData.LOGISTICS_EXECUTIVE_EMAIL);
+        logisticsExecutive.setPassword(passwordEncoder.encode(userPassword));
+        logisticsExecutive.setUserType(UserType.EMPLOYEE);
+        logisticsExecutive.setRoles(Set.of(userRole, employeeRole, logisticsExecutiveRole));
+        logisticsExecutive.setUserState(UserState.APPROVED);
+        this.userRepository.save(logisticsExecutive);
+
+        // Tracking Manager User
+        User trackingManager = new User();
+        trackingManager.setId(GlobalData.TRACKING_MANAGER_ID);
+        trackingManager.setEmail(GlobalData.TRACKING_MANAGER_EMAIL);
+        trackingManager.setPassword(passwordEncoder.encode(userPassword));
+        trackingManager.setUserType(UserType.EMPLOYEE);
+        trackingManager.setRoles(Set.of(userRole, employeeRole, trackingManagerRole));
+        trackingManager.setUserState(UserState.APPROVED);
+        this.userRepository.save(trackingManager);
 
         alreadySetup = true;
     }

@@ -15,6 +15,7 @@ application:
             inventory-group: inventory-notification-group-1
             payment-group: payment-notification-group-1
             inventory-update-group: inventory-update-notification-group-1
+            tracking-group: tracking-notification-group-1
 spring:
     data:
         mongodb:

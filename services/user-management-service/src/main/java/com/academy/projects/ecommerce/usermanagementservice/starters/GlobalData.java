@@ -7,6 +7,7 @@ public final class GlobalData {
 
     public static final String ADMIN_ID = "<ADMIN_ID>";
     public static final String ADMIN_EMAIL = "<ADMIN_EMAIL>";
+    public static final String ADMIN_EMPLOYEE_ID = "<ADMIN_EMPLOYEE_ID>";
     public static final String SELLER_ID = "<SELLER_ID>";
     public static final String SELLER_EMAIL = "<SELLER_EMAIL>";
     public static final String SELLER2_ID = "<SELLER2_ID>>";
@@ -27,4 +28,8 @@ public final class GlobalData {
     public static final String HR_MANAGER_EMAIL = "<HR_MANAGER_EMAIL>";
     public static final String CUSTOMER_MANAGER_ID = "<CUSTOMER_MANAGER_ID>";
     public static final String CUSTOMER_MANAGER_EMAIL = "<CUSTOMER_MANAGER_EMAIL>";
+    public static final String TRACKING_MANAGER_ID = "<TRACKING_MANAGER_ID>";
+    public static final String TRACKING_MANAGER_EMAIL = "<TRACKING_MANAGER_EMAIL>";
+    public static final String LOGISTICS_EXECUTIVE_ID = "<LOGISTICS_EXECUTIVE_ID>";
+    public static final String LOGISTICS_EXECUTIVE_EMAIL = "<LOGISTICS_EXECUTIVE_EMAIL>";
 }

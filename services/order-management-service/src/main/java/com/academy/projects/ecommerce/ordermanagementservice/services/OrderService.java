@@ -1,7 +1,7 @@
 package com.academy.projects.ecommerce.ordermanagementservice.services;
 
 import com.academy.projects.ecommerce.ordermanagementservice.exceptions.*;
-import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Action;
+import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.*;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.producers.services.IOrderUpdateManager;
 import com.academy.projects.ecommerce.ordermanagementservice.models.*;
 import com.academy.projects.ecommerce.ordermanagementservice.repositories.OrderItemRepository;
@@ -61,17 +61,6 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order updateStatus(String customerId, String orderId, PaymentStatus paymentStatus) {
-        Order order = orderRepository.findByIdAndCustomerId(orderId, customerId).orElseThrow(() -> new OrderNotFoundException(orderId, customerId));
-        if(paymentStatus.equals(PaymentStatus.REFUND)) {
-            order.getPaymentDetails().setPaymentStatus(PaymentStatus.REFUND);
-            order = orderRepository.save(order);
-            logger.info("Order '{}' payment status updated to '{}' successfully!!!", order.getId(), PaymentStatus.REFUND);
-        }
-        return order;
-    }
-
-    @Override
     public PreOrder createOrders(PreOrder preOrder) {
         Set<PreOrderItem> preOrderItems = preOrder.getPreOrderItems();
         Map<String, Set<PreOrderItem>> sellerPreOrders = get(preOrderItems);
@@ -93,6 +82,75 @@ public class OrderService implements IOrderService {
         }
         preOrder.setOrders(orders);
         return preOrder;
+    }
+
+    @Override
+    public Order updateTracking(TrackingDto trackingDto) {
+        Order order = orderRepository.findById(trackingDto.getOrderId()).orElse(null);
+        if(order != null) {
+            if(trackingDto.getAction().equals(Action.CANCEL_REQUESTED)) {
+                if(trackingDto.getActionStatus().equals(ActionStatus.SUCCEEDED)) {
+                    order.getTrackingDetails().setTrackingStatus(TrackingStatus.CANCELLED);
+                    order.getTrackingDetails().setComment("Order has been cancelled!!!");
+                    markCancelled(order);
+                } else {
+                    order.getTrackingDetails().setTrackingStatus(trackingDto.getTrackingStatus());
+                    order.getTrackingDetails().setComment(trackingDto.getMessage());
+                }
+            } else {
+                TrackingDetails trackingDetails = new TrackingDetails();
+                trackingDetails.setTrackingStatus(trackingDto.getTrackingStatus());
+                trackingDetails.setComment(trackingDto.getMessage());
+                trackingDetails.setTrackingNumber(trackingDto.getTrackingNumber());
+                trackingDetails.setTrackingId(trackingDto.getTrackingId());
+                order.setTrackingDetails(trackingDetails);
+            }
+
+            if(order.getTrackingDetails().getTrackingStatus().equals(TrackingStatus.DELIVERED))
+                order.setOrderStatus(OrderStatus.COMPLETED);
+
+            order = orderRepository.save(order);
+            logger.info("Order '{}' tracking updated successfully!!!", order.getId());
+        }
+        return order;
+    }
+
+    @Override
+    public Order updatePayment(PaymentDto paymentDto) {
+        Payment payment = paymentDto.getPayment();
+        Order order = orderRepository.findById(payment.getOrderId()).orElse(null);
+        if(order != null) {
+            if(paymentDto.getAction().equals(Action.CANCEL_REQUESTED)) {
+                if(paymentDto.getActionStatus().equals(ActionStatus.SUCCEEDED) && payment.getPaymentStatus().equals(PaymentStatus.REFUNDED)) {
+                    order.getPaymentDetails().setPaymentStatus(PaymentStatus.CANCELLED);
+                    order.getPaymentDetails().setComment("Order has been cancelled!!!");
+                    markCancelled(order);
+                } else {
+                    order.getPaymentDetails().setPaymentStatus(payment.getPaymentStatus());
+                    order.getPaymentDetails().setComment(paymentDto.getMessage());
+                }
+            } else {
+                PaymentDetails paymentDetails = new PaymentDetails();
+                paymentDetails.setPaymentStatus(payment.getPaymentStatus());
+                paymentDetails.setComment(paymentDto.getMessage());
+                paymentDetails.setPaymentDate(payment.getCreatedAt());
+                paymentDetails.setPaymentId(payment.getPaymentId());
+                paymentDetails.setCurrencyType(payment.getCurrency());
+                paymentDetails.setPaymentMethod(payment.getPaymentMethod());
+                order.setPaymentDetails(paymentDetails);
+            }
+            order = orderRepository.save(order);
+            logger.info("Order '{}' payment details updated successfully!!!", order.getId());
+        }
+        return order;
+    }
+
+    private void markCancelled(Order order) {
+        if(order.getOrderStatus().equals(OrderStatus.CANCEL_REQUESTED)) {
+            boolean paymentCancelled = (order.getPaymentDetails().getPaymentStatus().equals(PaymentStatus.CANCELLED) || order.getPaymentDetails().getPaymentStatus().equals(PaymentStatus.REFUNDED));
+            boolean trackingCancelled = order.getTrackingDetails().getTrackingStatus().equals(TrackingStatus.CANCELLED);
+            if(paymentCancelled && trackingCancelled) order.setOrderStatus(OrderStatus.CANCELLED);
+        }
     }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
@@ -122,6 +180,7 @@ public class OrderService implements IOrderService {
         orderItem.setProductName(preOrderItem.getProductName());
         orderItem.setUnitPrice(preOrderItem.getUnitPrice());
         orderItem.setVariantId(preOrderItem.getVariantId());
+        orderItem.setEta(preOrderItem.getDeliveryFeasibilityDetails().getEta());
         return orderItemRepository.save(orderItem);
 
     }

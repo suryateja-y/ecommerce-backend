@@ -2,6 +2,7 @@ package com.academy.projects.ecommerce.ordermanagementservice.kafka.consumers.co
 
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.ApprovalRequest;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.PaymentDto;
+import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.TrackingDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +49,20 @@ public class ConsumerConfiguration {
     public ConcurrentKafkaListenerContainerFactory<String, ApprovalRequest> kafkaListenerContainerFactoryForInventory() {
         ConcurrentKafkaListenerContainerFactory<String, ApprovalRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(approvalConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, TrackingDto> trackingConsumerFactory() {
+        JsonDeserializer<TrackingDto> jsonDeserializer = new JsonDeserializer<>(TrackingDto.class);
+        jsonDeserializer.addTrustedPackages("com/academy/projects/ecommerce/ordermanagementservice/kafka/dtos/TrackingDto");
+        return new DefaultKafkaConsumerFactory<>(configurationProperties(jsonDeserializer), new StringDeserializer(), jsonDeserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, TrackingDto> kafkaListenerContainerFactoryForTracking() {
+        ConcurrentKafkaListenerContainerFactory<String, TrackingDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(trackingConsumerFactory());
         return factory;
     }
 

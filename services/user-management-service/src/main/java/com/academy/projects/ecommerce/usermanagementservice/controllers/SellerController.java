@@ -90,7 +90,7 @@ public class SellerController {
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_TRACKING_MANAGER')")
     @GetMapping("/{sellerId}/addresses")
     public ResponseEntity<Address> getAddress(@PathVariable String sellerId) {
         Address address = sellerManagementService.getAddress(sellerId);

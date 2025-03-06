@@ -14,4 +14,6 @@ import java.io.Serializable;
 public class PaymentDto implements Serializable {
     private Payment payment;
     private Action action;
+    private ActionStatus actionStatus;
+    private String message;
 }

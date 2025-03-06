@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity(name = "order_items")
 @Getter
@@ -23,6 +24,7 @@ public class OrderItem extends BaseModel {
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
+    private Date eta;
 
     @Override
     public int hashCode() {

@@ -44,19 +44,28 @@ public class OrderManagementService {
 
     @KafkaListener(topics = "${application.kafka.topics.order-topic}", groupId = "${application.kafka.consumer.order-group}", containerFactory = "kafkaListenerContainerFactoryForOrder")
     public void consumer(OrderDto orderDto) {
+        PaymentDto paymentDto = new PaymentDto();
+        Payment payment = null;
         try {
-            if(orderDto.getAction().equals(Action.STATUS_UPDATE) && orderDto.getOrderStatus().equals(OrderStatus.CANCELLED)) {
-                Payment payment = paymentService.refund(from(orderDto));
+            if(orderDto.getAction().equals(Action.CANCEL_REQUESTED)) {
+                payment = paymentService.refund(from(orderDto));
                 payment.setOrderId(orderDto.getOrderId());
-                // Sending update to Kafka
-                paymentUpdateManager.sendUpdate(payment, Action.STATUS_UPDATE);
-                logger.info("Payment Refund Successful for the Pre-Order!!! PaymentId: '{}'", payment.getPaymentId());
+                payment = paymentService.refund(from(orderDto));
+                paymentDto.setPayment(payment);
+                paymentDto.setAction(Action.CANCEL_REQUESTED);
+                paymentDto.setActionStatus(ActionStatus.SUCCEEDED);
+                paymentDto.setMessage("Refund initiated for the Order");
+                logger.info("Payment Refund Successful for the Order!!! PaymentId: '{}'", payment.getPaymentId());
             }
-
-
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            paymentDto.setActionStatus(ActionStatus.FAILED);
+            paymentDto.setAction(Action.CANCEL_REQUESTED);
+            paymentDto.setMessage(e.getMessage());
+            paymentDto.setPayment(payment);
         }
+        // Sending update to Kafka
+        paymentUpdateManager.sendUpdate(paymentDto);
+
     }
 
     private void initiatePayment(PreOrderDto preOrderDto) {

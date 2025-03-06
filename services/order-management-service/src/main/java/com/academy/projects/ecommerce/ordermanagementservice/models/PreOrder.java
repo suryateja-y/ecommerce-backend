@@ -34,4 +34,7 @@ public class PreOrder extends BaseModel {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Invoice invoice;
+
+    private String shippingAddressId;
+
 }

@@ -4,7 +4,7 @@ public enum Action {
     CREATE,
     UPDATE,
     DELETE,
-    CANCELLED,
+    CANCEL_REQUESTED,
     STATUS_UPDATE,
     REFUND
 }

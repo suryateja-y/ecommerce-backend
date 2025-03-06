@@ -38,6 +38,8 @@ application:
             product-update-topic: product-update
             variant-update-topic: variant-update
             user-approval-topic: user-approval
+            tracking-topic: tracking-topic
+            
     security:
         allow:
             generic: /h2-console/**,/v3/api-docs/**,/swagger-ui/**

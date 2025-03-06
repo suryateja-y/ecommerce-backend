@@ -33,4 +33,7 @@ public class Order extends BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private PreOrder preOrder;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TrackingDetails trackingDetails;
 }

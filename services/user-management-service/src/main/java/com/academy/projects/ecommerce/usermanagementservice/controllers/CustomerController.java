@@ -85,6 +85,13 @@ public class CustomerController {
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TRACKING_MANAGER')")
+    @GetMapping("/{customerId}/addresses/{addressId}")
+    public ResponseEntity<Address> getCustomerAddress(@PathVariable String customerId, @PathVariable String addressId) {
+        Address address = customerManagement.getAddress(customerId, addressId);
+        return new ResponseEntity<>(address, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @GetMapping("/addresses")
     public ResponseEntity<List<Address>> getAddresses(Authentication authentication) {

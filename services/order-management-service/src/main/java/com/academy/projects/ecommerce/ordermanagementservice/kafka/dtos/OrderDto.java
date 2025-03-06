@@ -19,6 +19,7 @@ public class OrderDto implements Serializable {
     private Date orderDate;
     private Set<OrderItem> orderItems;
     private String customerId;
+    private String shippingAddressId;
     private BigDecimal totalAmount;
     private OrderStatus orderStatus;
     private String invoiceId;
