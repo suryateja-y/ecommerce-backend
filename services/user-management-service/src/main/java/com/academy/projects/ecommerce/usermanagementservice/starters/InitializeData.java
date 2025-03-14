@@ -158,10 +158,21 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         customerUser.setPhoneNumber("+919999999999");
         customerUser = userRepository.save(customerUser);
 
+        Address customerAddress = new Address();
+        customerAddress.setHouseNumber("SH-2");
+        customerAddress.setStreet("Customer Galaxy");
+        customerAddress.setAddressLine1("Customer Galaxy Street");
+        customerAddress.setCity("Star City");
+        customerAddress.setState("Milky Way");
+        customerAddress.setCountry("India");
+        customerAddress.setZip("523754");
+        customerAddress = addressRepository.save(customerAddress);
+
         customer.setUser(customerUser);
         customer.setId(customerUser.getId());
         customer.setAge(30);
         customer.setGender(Gender.MALE);
+        customer.getAddresses().add(customerAddress);
         customerRepository.save(customer);
 
         // Creating Employee

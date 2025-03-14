@@ -10,6 +10,7 @@ application:
     kafka:
         consumer:
             pre-order-group: order-payment-group-1
+            order-group: order-payment-group-2
     security:
         allow:
             specific: /api/${application.version}/webhooks

@@ -28,4 +28,5 @@ public interface PackageRequestRepository extends MongoRepository<PackageRequest
     Page<PackageRequest> findAllBySellerId(String sellerId, Pageable pageable);
     Page<PackageRequest> findAllByPackageStatus(PackageStatus packageStatus, Pageable pageable);
     Optional<PackageRequest> findByIdAndCustomerIdOrSellerId(String packageRequestId, String customerId, String sellerId);
+    boolean existsByOrderId(String orderId);
 }

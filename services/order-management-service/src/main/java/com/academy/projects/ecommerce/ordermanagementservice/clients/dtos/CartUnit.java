@@ -17,7 +17,7 @@ public class CartUnit implements Serializable {
     private String productName;
     private String variantId;
     private String sellerId;
-    private int quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
     private boolean inStock;
 }

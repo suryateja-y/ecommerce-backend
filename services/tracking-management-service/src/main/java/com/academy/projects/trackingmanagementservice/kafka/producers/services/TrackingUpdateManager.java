@@ -54,6 +54,7 @@ public class TrackingUpdateManager implements ITrackingUpdateManager {
                 .message("Status Update")
                 .trackingId(orderPackage.getId())
                 .trackingNumber(orderPackage.getTrackingNumber())
+                .customerId(orderPackage.getCustomerId())
                 .build();
     }
 }

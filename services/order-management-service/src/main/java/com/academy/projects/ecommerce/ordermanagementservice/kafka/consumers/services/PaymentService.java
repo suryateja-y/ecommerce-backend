@@ -1,7 +1,6 @@
 package com.academy.projects.ecommerce.ordermanagementservice.kafka.consumers.services;
 
 import com.academy.projects.ecommerce.ordermanagementservice.dtos.UpdateOrderRequestDto;
-import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Action;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Payment;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.PaymentDto;
 import com.academy.projects.ecommerce.ordermanagementservice.models.Order;
@@ -31,8 +30,9 @@ public class PaymentService {
     @KafkaListener(topics = "${application.kafka.topics.payment-topic}", groupId = "${application.kafka.consumer.payment-group}", containerFactory = "kafkaListenerContainerFactoryForPayment")
     public void consumer(PaymentDto paymentDto) {
         try {
-            if(paymentDto.getAction().equals(Action.CREATE)) {
-                PreOrder preOrder = preOrderService.update(from(paymentDto.getPayment()));
+            PreOrder preOrder = preOrderService.getOrNull(paymentDto.getPayment().getOrderId());
+            if(preOrder != null) {
+                preOrder = preOrderService.update(from(paymentDto.getPayment()));
                 logger.info("Pre Order updated: '{}'!!!", preOrder.getId());
             } else {
                 Order order = orderService.updatePayment(paymentDto);

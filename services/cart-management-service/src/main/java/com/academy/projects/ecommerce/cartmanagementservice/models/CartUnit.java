@@ -17,7 +17,7 @@ public class CartUnit {
     private String productName;
     private String variantId;
     private String sellerId;
-    private int quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
     private boolean inStock;
     private Date addedOrModifiedOn;

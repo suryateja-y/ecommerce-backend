@@ -19,7 +19,7 @@ public class TrackingService {
     public TrackingService(OrderService orderService) {
         this.orderService = orderService;
     }
-    @KafkaListener(topics = "${application.kafka.topics.tracking-topic}", groupId = "${application.kafka.consumer.tracking-group}", containerFactory = "kafkaListenerContainerFactoryForPayment")
+    @KafkaListener(topics = "${application.kafka.topics.tracking-topic}", groupId = "${application.kafka.consumer.tracking-group}", containerFactory = "kafkaListenerContainerFactoryForTracking")
     public void consumer(TrackingDto trackingDto) {
         try {
             Order order = orderService.updateTracking(trackingDto);

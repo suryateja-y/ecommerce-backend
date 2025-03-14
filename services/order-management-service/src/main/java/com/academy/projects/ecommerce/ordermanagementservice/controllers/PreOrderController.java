@@ -1,5 +1,6 @@
 package com.academy.projects.ecommerce.ordermanagementservice.controllers;
 
+import com.academy.projects.ecommerce.ordermanagementservice.dtos.CheckoutRequestDto;
 import com.academy.projects.ecommerce.ordermanagementservice.models.PreOrder;
 import com.academy.projects.ecommerce.ordermanagementservice.models.PreOrderStatus;
 import com.academy.projects.ecommerce.ordermanagementservice.services.IPreOrderService;
@@ -24,8 +25,8 @@ public class PreOrderController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public ResponseEntity<PreOrder> checkout(@RequestBody String addressId, Authentication authentication) {
-        PreOrder preOrder = preOrderService.checkout(authentication.getName(), addressId);
+    public ResponseEntity<PreOrder> checkout(@RequestBody CheckoutRequestDto requestDto, Authentication authentication) {
+        PreOrder preOrder = preOrderService.checkout(authentication.getName(), requestDto.getAddressId());
         return new ResponseEntity<>(preOrder, HttpStatus.CREATED);
     }
 

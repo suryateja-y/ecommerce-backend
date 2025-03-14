@@ -1,7 +1,6 @@
 package com.academy.projects.ecommerce.productsearchservice.services;
 
 import com.academy.projects.ecommerce.productsearchservice.dtos.DeliveryFeasibilityDetails;
-import com.academy.projects.ecommerce.productsearchservice.dtos.DeliveryFeasibilityItem;
 import com.academy.projects.ecommerce.productsearchservice.models.Address;
 import com.academy.projects.ecommerce.productsearchservice.models.InventoryUnit;
 import com.academy.projects.ecommerce.productsearchservice.models.Seller;
@@ -11,20 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Service
 public class ETAService implements IETAService {
 
     private final ISellerService sellerService;
-    private final IInventoryService inventoryService;
 
     private final Logger logger = LoggerFactory.getLogger(ETAService.class);
 
     @Autowired
-    public ETAService(ISellerService sellerService, IInventoryService inventoryService) {
+    public ETAService(ISellerService sellerService) {
         this.sellerService = sellerService;
-        this.inventoryService = inventoryService;
     }
 
     @Override
@@ -49,23 +45,6 @@ public class ETAService implements IETAService {
                 .isFeasible(isFeasible)
                 .reason(reason)
                 .sellerId(inventoryUnit.getSellerId())
-                .build();
-    }
-
-    @Override
-    public DeliveryFeasibilityDetails checkFeasibilityAndETA(DeliveryFeasibilityItem item, Address userAddress) {
-        boolean isFeasible = false; String reason;
-        InventoryUnit inventoryUnit = inventoryService.get(item.getVariantId(), item.getSellerId());
-        if(inventoryUnit == null) reason = "Seller '" + item.getSellerId() + "' is not selling the Variant '" + item.getVariantId() + "'!!!";
-        else if(inventoryUnit.getQuantity() < item.getQuantity()) reason = "No enough stock of Variant '" + item.getVariantId() + "' in Seller '" + item.getSellerId() + "'!!!";
-        else if(!Objects.equals(inventoryUnit.getUnitPrice(), item.getUnitPrice())) reason = "Change in price of the Variant. Current price: " + inventoryUnit.getUnitPrice();
-        else return this.checkFeasibilityAndETA(inventoryUnit, userAddress);
-
-        return DeliveryFeasibilityDetails.builder()
-                .eta(null)
-                .isFeasible(isFeasible)
-                .sellerId(item.getSellerId())
-                .reason(reason)
                 .build();
     }
 

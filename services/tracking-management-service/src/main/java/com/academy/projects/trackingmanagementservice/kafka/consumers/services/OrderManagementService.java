@@ -5,6 +5,7 @@ import com.academy.projects.trackingmanagementservice.kafka.dtos.OrderDto;
 import com.academy.projects.trackingmanagementservice.kafka.dtos.OrderItem;
 import com.academy.projects.trackingmanagementservice.kafka.producers.services.ITrackingUpdateManager;
 import com.academy.projects.trackingmanagementservice.models.PackageRequest;
+import com.academy.projects.trackingmanagementservice.models.PackageStatus;
 import com.academy.projects.trackingmanagementservice.services.IPackageRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,7 @@ public class OrderManagementService {
         packageRequest.setSellerId(getSellerId(orderDto));
         packageRequest.setEta(getETA(orderDto));
         packageRequest.setCustomerId(orderDto.getCustomerId());
+        packageRequest.setPackageStatus(PackageStatus.CREATED);
         return packageRequest;
     }
 

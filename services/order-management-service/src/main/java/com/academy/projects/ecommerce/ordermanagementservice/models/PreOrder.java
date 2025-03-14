@@ -2,6 +2,7 @@ package com.academy.projects.ecommerce.ordermanagementservice.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Transactional
 public class PreOrder extends BaseModel {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<PreOrderItem> preOrderItems = new LinkedHashSet<>();
@@ -26,13 +27,13 @@ public class PreOrder extends BaseModel {
     @Enumerated(EnumType.STRING)
     private PreOrderStatus orderStatus;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private PaymentDetails paymentDetails;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "preOrder")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "preOrder")
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Invoice invoice;
 
     private String shippingAddressId;

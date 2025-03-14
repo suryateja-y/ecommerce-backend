@@ -21,6 +21,7 @@ public class OrderPackage extends BaseModel implements Serializable {
     private String trackingNumber;
     private Address deliveryAddress;
     private Address sellerAddress;
+    private String customerId;
     private Date eta;
     private TrackingStatus trackingStatus;
     private List<TrackingAction> actions = new LinkedList<>();

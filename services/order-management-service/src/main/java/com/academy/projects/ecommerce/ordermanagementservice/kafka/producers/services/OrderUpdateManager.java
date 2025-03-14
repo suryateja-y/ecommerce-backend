@@ -48,6 +48,7 @@ public class OrderUpdateManager implements IOrderUpdateManager {
                 .invoiceId(order.getInvoice() == null ? "" : order.getInvoice().getId())
                 .action(action)
                 .shippingAddressId(order.getPreOrder().getShippingAddressId())
+                .currencyType(order.getPreOrder().getPaymentDetails().getCurrencyType())
                 .build();
     }
 

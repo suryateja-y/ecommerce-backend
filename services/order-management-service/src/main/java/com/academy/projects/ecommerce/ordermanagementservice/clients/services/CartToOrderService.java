@@ -36,7 +36,7 @@ public class CartToOrderService implements ICartToOrderService {
     }
 
     private OrderItem from(CartUnit cartUnit) {
-        if(cartUnit.isInStock()) throw new ProductNotInStockException(cartUnit.getVariantId(), cartUnit.getSellerId());
+        if(!cartUnit.isInStock()) throw new ProductNotInStockException(cartUnit.getVariantId(), cartUnit.getSellerId());
         OrderItem orderItem = new OrderItem();
         orderItem.setProductId(cartUnit.getProductId());
         orderItem.setProductName(cartUnit.getProductName());

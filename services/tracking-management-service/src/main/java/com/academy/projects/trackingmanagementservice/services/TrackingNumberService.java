@@ -19,7 +19,7 @@ public class TrackingNumberService implements ITrackingNumberService {
     @Override
     @Transactional
     public String getTrackingNumber() {
-        long currentNumber = trackingNumberRepository.findTrackingNumberById("tracking_number").orElseThrow(() -> new TrackingNumberGenerationException("Failed to Generate Tracking Number!!! 'tracking_number' record not found!!!"));
+        long currentNumber = trackingNumberRepository.findTrackingNumberById("tracking_number").orElse(1L);
         String trackingNumber = "pack-" + currentNumber;
         trackingNumberRepository.save(TrackingNumber.builder().id("tracking_number").trackingNumber(currentNumber + 1).build());
         return trackingNumber;

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -25,14 +26,18 @@ public class OrderService implements IOrderService {
     private final OrderItemRepository orderItemRepository;
 
     private final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private final IPaymentDetailsService paymentDetailsService;
+    private final TrackingDetailsService trackingDetailsService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, IOrderUpdateManager orderUpdateManager, InvoiceService invoiceService, IInventoryService inventoryService, OrderItemRepository orderItemRepository) {
+    public OrderService(OrderRepository orderRepository, IOrderUpdateManager orderUpdateManager, InvoiceService invoiceService, IInventoryService inventoryService, OrderItemRepository orderItemRepository, IPaymentDetailsService paymentDetailsService, TrackingDetailsService trackingDetailsService) {
         this.orderRepository = orderRepository;
         this.orderUpdateManager = orderUpdateManager;
         this.invoiceService = invoiceService;
         this.inventoryService = inventoryService;
         this.orderItemRepository = orderItemRepository;
+        this.paymentDetailsService = paymentDetailsService;
+        this.trackingDetailsService = trackingDetailsService;
     }
 
     @Override
@@ -62,18 +67,21 @@ public class OrderService implements IOrderService {
 
     @Override
     public PreOrder createOrders(PreOrder preOrder) {
+        PaymentDetails paymentDetails = preOrder.getPaymentDetails();
         Set<PreOrderItem> preOrderItems = preOrder.getPreOrderItems();
         Map<String, Set<PreOrderItem>> sellerPreOrders = get(preOrderItems);
         List<Order> orders = new LinkedList<>();
+
         for(Map.Entry<String, Set<PreOrderItem>> entry : sellerPreOrders.entrySet()) {
             Set<PreOrderItem> sellerPreOrderItems = entry.getValue();
             Order order = new Order();
             order.setCustomerId(preOrder.getCustomerId());
             order.setOrderStatus(OrderStatus.CREATED);
             order.setPreOrder(preOrder);
-            order.setPaymentDetails(preOrder.getPaymentDetails());
+            order.setPaymentDetails(paymentDetailsForOrder(paymentDetails));
             Set<OrderItem> orderItems = from(sellerPreOrderItems);
             order.setOrderItems(orderItems);
+            order.setTotalAmount(this.calculateTotalAmount(orderItems));
             order = orderRepository.save(order);
             Invoice invoice = invoiceService.createInvoice(order);
             order.setInvoice(invoice);
@@ -84,6 +92,17 @@ public class OrderService implements IOrderService {
         return preOrder;
     }
 
+    private PaymentDetails paymentDetailsForOrder(PaymentDetails paymentDetails) {
+        paymentDetails.setId(null);
+        return  paymentDetailsService.save(paymentDetails);
+    }
+    private BigDecimal calculateTotalAmount(Set<OrderItem> orderItems) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for(OrderItem orderItem : orderItems) {
+            totalAmount = totalAmount.add(orderItem.getTotalPrice());
+        }
+        return totalAmount;
+    }
     @Override
     public Order updateTracking(TrackingDto trackingDto) {
         Order order = orderRepository.findById(trackingDto.getOrderId()).orElse(null);
@@ -103,6 +122,7 @@ public class OrderService implements IOrderService {
                 trackingDetails.setComment(trackingDto.getMessage());
                 trackingDetails.setTrackingNumber(trackingDto.getTrackingNumber());
                 trackingDetails.setTrackingId(trackingDto.getTrackingId());
+                trackingDetails = trackingDetailsService.save(trackingDetails);
                 order.setTrackingDetails(trackingDetails);
             }
 
@@ -160,6 +180,7 @@ public class OrderService implements IOrderService {
         for(PreOrderItem preOrderItem : preOrderItems) {
             Set<PreOrderItem> sellerPreOrderItems = sellerPreOrders.getOrDefault(preOrderItem.getSellerId(), new LinkedHashSet<>());
             sellerPreOrderItems.add(preOrderItem);
+            sellerPreOrders.put(preOrderItem.getSellerId(), sellerPreOrderItems);
         }
         return sellerPreOrders;
     }

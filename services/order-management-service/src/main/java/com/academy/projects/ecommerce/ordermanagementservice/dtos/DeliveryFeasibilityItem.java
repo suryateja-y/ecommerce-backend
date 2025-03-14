@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class DeliveryFeasibilityItem implements Serializable {
     private String variantId;
     private String sellerId;
-    private int quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
 }

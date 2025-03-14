@@ -1,14 +1,14 @@
 package com.academy.projects.ecommerce.ordermanagementservice.services;
 
 import com.academy.projects.ecommerce.ordermanagementservice.clients.services.UserManagementServiceClient;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DetailsRequestDto;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DetailsResponseDto;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.SellerOption;
+import com.academy.projects.ecommerce.ordermanagementservice.dtos.*;
 import com.academy.projects.ecommerce.ordermanagementservice.exceptions.AddressNotProvidedException;
 import com.academy.projects.ecommerce.ordermanagementservice.exceptions.DeliveryNotPossibleException;
 import com.academy.projects.ecommerce.ordermanagementservice.exceptions.SellerNotFoundException;
 import com.academy.projects.ecommerce.ordermanagementservice.models.Address;
+import com.academy.projects.ecommerce.ordermanagementservice.models.DeliveryFeasibility;
 import com.academy.projects.ecommerce.ordermanagementservice.models.InventoryUnit;
+import com.academy.projects.ecommerce.ordermanagementservice.models.OrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,27 @@ public class DetailsService implements IDetailsService {
             sellerOptions.add(sellerOption);
         }
         return sellerOptions;
+    }
+
+    @Override
+    public DeliveryFeasibility checkFeasibilityAndETA(OrderItem orderItem, Address customerAddress) {
+        boolean isFeasible = false; String reason; Date eta = null;
+        InventoryUnit inventoryUnit = inventoryService.getInventoryByVariantIdAndSellerId(orderItem.getVariantId(), orderItem.getSellerId());
+        if(inventoryUnit == null) reason = "Seller '" + orderItem.getSellerId() + "' is not selling the Variant '" + orderItem.getVariantId() + "'!!!";
+        else if(inventoryUnit.getQuantity() < orderItem.getQuantity()) reason = "No enough stock of Variant '" + orderItem.getVariantId() + "' at Seller '" + orderItem.getSellerId() + "'!!!";
+        else if(!orderItem.getUnitPrice().equals(inventoryUnit.getUnitPrice())) reason = "Change in price of the Variant. Current price: " + inventoryUnit.getUnitPrice();
+        else {
+            eta = orderItem.getEta();
+            isFeasible = true;
+            reason = "";
+        }
+
+        return DeliveryFeasibility.builder()
+                .eta(eta)
+                .isFeasible(isFeasible)
+                .sellerId(orderItem.getSellerId())
+                .reason(reason)
+                .build();
     }
 
     private Address getSellerAddress(String sellerId) {

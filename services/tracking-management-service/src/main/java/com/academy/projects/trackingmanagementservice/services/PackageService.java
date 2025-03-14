@@ -63,12 +63,13 @@ public class PackageService implements IPackageService {
 
         OrderPackage orderPackage = new OrderPackage();
         orderPackage.setTrackingStatus(TrackingStatus.CREATED);
-        orderPackage.setOrderId(packageRequest.getId());
+        orderPackage.setOrderId(packageRequest.getOrderId());
         orderPackage.setActions(List.of());
         orderPackage.setEta(packageRequest.getEta());
         orderPackage.setTrackingNumber(trackingNumberService.getTrackingNumber());
         orderPackage.setDeliveryAddress(customerAddress);
         orderPackage.setSellerAddress(sellerAddress);
+        orderPackage.setCustomerId(packageRequest.getCustomerId());
         orderPackage = packageRepository.save(orderPackage);
         // Send update to Kafka
         trackingUpdateManager.sendUpdate(orderPackage, Action.CREATE);
@@ -123,7 +124,7 @@ public class PackageService implements IPackageService {
                 .message(message).build();
         orderPackage.getActions().add(trackingAction);
 
-        if((trackingStatus == TrackingStatus.OUT_OF_DELIVERY) || (trackingStatus == TrackingStatus.DELIVERED))
+        if((trackingStatus == TrackingStatus.OUT_FOR_DELIVERY) || (trackingStatus == TrackingStatus.DELIVERED))
             orderPackage.setTrackingStatus(trackingStatus);
         else
             orderPackage.setTrackingStatus(TrackingStatus.IN_TRANSIT);

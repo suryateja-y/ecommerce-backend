@@ -37,8 +37,8 @@ spring:
                         - Path=/api/v1/approvals/**
                     filters:
                         - Authenticate
-                -   id: product-service
-                    uri: lb://PRODUCT-SERVICE
+                -   id: product-management-service
+                    uri: lb://PRODUCT-MANAGEMENT-SERVICE
                     predicates:
                         - Path=/api/v1/products/**
                     filters:
@@ -65,6 +65,28 @@ spring:
                     uri: lb://ORDER-MANAGEMENT-SERVICE
                     predicates:
                         - Path=/api/v1/orders/**
+                    filters:
+                        - Authenticate
+                -   id: order-management-service
+                    uri: lb://ORDER-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/preorders/**
+                    filters:
+                        - Authenticate
+                -   id: cart-management-service
+                    uri: lb://CART-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/carts/**
+                    filters:
+                        - Authenticate
+                -   id: payment-management-service
+                    uri: lb://PAYMENT-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/webhooks/**
+                -   id: tracking-management-service
+                    uri: lb://TRACKING-MANAGEMENT-SERVICE
+                    predicates:
+                        - Path=/api/v1/tracking/**
                     filters:
                         - Authenticate
                 -   id: tester-service

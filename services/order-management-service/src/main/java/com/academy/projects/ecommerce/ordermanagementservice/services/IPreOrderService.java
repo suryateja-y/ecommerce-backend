@@ -10,4 +10,5 @@ public interface IPreOrderService {
     PreOrder checkout(String customerId, String addressId);
     PreOrder update(UpdateOrderRequestDto requestDto);
     List<PreOrder> getOrders(String customerId, PreOrderStatus preOrderStatus, int page, int pageSize);
+    PreOrder getOrNull(String orderId);
 }

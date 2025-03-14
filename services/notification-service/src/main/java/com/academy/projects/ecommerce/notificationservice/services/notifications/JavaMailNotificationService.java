@@ -15,10 +15,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 @Service
@@ -52,11 +48,9 @@ public class JavaMailNotificationService implements IEmailNotificationService {
             for(Map.Entry<String, Object> entry : data.entrySet())
                 context.setVariable(entry.getKey(), entry.getValue());
 
-            String htmlContent = templateEngine.process("/email/" + register.getRegistryKey() + ".html", context);
+            String htmlContent = templateEngine.process(emailRegister.getTemplateName() + ".html", context);
             helper.setText(htmlContent, true);
-            // Uncomment after testing
-//            mailSender.send(mimeMessage);
-            saveFile(htmlContent, register.getRegistryKey());
+            mailSender.send(mimeMessage);
             notificationArchiveService.saveEmailNotification(emailRegister, recipientDetails.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
             logger.error(e.getMessage());
@@ -69,20 +63,5 @@ public class JavaMailNotificationService implements IEmailNotificationService {
             subject = subject.replace("${" + entry.getKey() + "}", String.valueOf(entry.getValue()));
         }
         return subject;
-    }
-
-    // Remove after the testing
-    private void saveFile(String htmlContent, String fileName) {
-        File file = new File("/D:/ms/projects/ecommerce/reports/" + fileName + ".html");
-        if(file.exists()) {
-            boolean isDeleted = file.delete();
-            if(!isDeleted)
-                logger.error("Failed to delete file '{}", fileName);
-        }
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            writer.println(htmlContent);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
     }
 }

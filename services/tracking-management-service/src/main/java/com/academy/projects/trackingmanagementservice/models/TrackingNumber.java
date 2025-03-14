@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public class TrackingNumber {
     @MongoId
     @Id
-    private String id = "tracking_number";
+    private String id;
 
     private Long trackingNumber = 1L;
 }

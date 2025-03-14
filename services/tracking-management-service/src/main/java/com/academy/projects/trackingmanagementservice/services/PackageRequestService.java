@@ -32,6 +32,7 @@ public class PackageRequestService implements IPackageRequestService {
 
     @Override
     public void create(PackageRequest packageRequest) {
+        if(packageRequestRepository.existsByOrderId(packageRequest.getOrderId())) return;
         if((packageRequest.getSellerId() == null) || packageRequest.getSellerId().isEmpty()) throw new SellerDetailsNotFound("Seller Id not provided for the order: '" + packageRequest.getOrderId() + "'!!!");
         packageRequest = packageRequestRepository.save(packageRequest);
         logger.info("Package Request created for the order: '{}' successfully!!! Request ID: '{}'!!!", packageRequest.getOrderId(), packageRequest.getId());

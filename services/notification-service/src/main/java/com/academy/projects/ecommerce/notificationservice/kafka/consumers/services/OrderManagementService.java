@@ -73,6 +73,8 @@ public class OrderManagementService {
     }
 
     private String formatCurrency(BigDecimal amount, CurrencyType currencyType) {
+        if(currencyType == null)
+            currencyType = CurrencyType.INR;
         Locale locale = getLocale(currencyType);
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
         return format.format(amount);

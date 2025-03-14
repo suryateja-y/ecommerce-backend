@@ -13,4 +13,6 @@ public final class GlobalData {
     public static final String SELLER_MANAGER_EMAIL = "<SELLER_MANAGER_EMAIL>";
     public static final String PRODUCT_MANAGER_ID = "<PRODUCT_MANAGER_ID>";
     public static final String PRODUCT_MANAGER_EMAIL = "<PRODUCT_MANAGER_EMAIL>";
+    public static final String CUSTOMER_ID = "<CUSTOMER_ID>";
+    public static final String CUSTOMER_EMAIL = "<CUSTOMER_EMAIL>";
 }

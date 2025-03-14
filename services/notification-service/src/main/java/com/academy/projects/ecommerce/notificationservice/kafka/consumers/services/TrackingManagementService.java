@@ -43,7 +43,7 @@ public class TrackingManagementService {
     private String getRegistryKey(TrackingStatus trackingStatus) {
         return switch (trackingStatus) {
             case CREATED -> "tracking-shipped";
-            case OUT_OF_DELIVERY -> "tracking-out-for-delivery";
+            case OUT_FOR_DELIVERY -> "tracking-out-for-delivery";
             case DELIVERED -> "tracking-delivered";
             default -> throw new InvalidActionException(trackingStatus);
         };

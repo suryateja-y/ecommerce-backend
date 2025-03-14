@@ -94,6 +94,7 @@ public class OrderManagementService {
                 .orderId(preOrderDto.getPreOrderId())
                 .customerId(preOrderDto.getCustomerId())
                 .orderItems(preOrderDto.getPreOrderItems())
+                .totalAmount(preOrderDto.getTotalAmount())
                 .build();
     }
 

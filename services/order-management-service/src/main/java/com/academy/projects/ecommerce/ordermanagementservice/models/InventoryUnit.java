@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Entity
+@Entity(name = "inventory")
 @Getter
 @Setter
 @AllArgsConstructor

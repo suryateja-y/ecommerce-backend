@@ -12,8 +12,8 @@ public class Address {
     private String houseNumber;
     @NotBlank(message = "Street should be provided!!!")
     private String street;
-    private String AddressLine1;
-    private String AddressLine2;
+    private String addressLine1;
+    private String addressLine2;
     @NotBlank(message = "City should be provided!!!")
     private String city;
     @NotBlank(message = "State should be provided!!!")

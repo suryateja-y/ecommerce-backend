@@ -19,4 +19,5 @@ public class TrackingDto implements Serializable {
     private Action action;
     private ActionStatus actionStatus;
     private String message;
+    private String customerId;
 }

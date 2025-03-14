@@ -21,7 +21,7 @@ public class OrderItem extends BaseModel {
     private String productName;
     private String variantId;
     private String sellerId;
-    private int quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
     private Date eta;

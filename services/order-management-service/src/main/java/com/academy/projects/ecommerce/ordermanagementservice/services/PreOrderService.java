@@ -1,16 +1,14 @@
 package com.academy.projects.ecommerce.ordermanagementservice.services;
 
 import com.academy.projects.ecommerce.ordermanagementservice.clients.services.ICartToOrderService;
-import com.academy.projects.ecommerce.ordermanagementservice.clients.services.ProductSearchServiceClient;
 import com.academy.projects.ecommerce.ordermanagementservice.clients.services.UserManagementServiceClient;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DeliveryFeasibilityDetails;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DeliveryFeasibilityItem;
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DeliveryFeasibilityRequestDto;
+import com.academy.projects.ecommerce.ordermanagementservice.models.DeliveryFeasibility;
 import com.academy.projects.ecommerce.ordermanagementservice.dtos.UpdateOrderRequestDto;
 import com.academy.projects.ecommerce.ordermanagementservice.exceptions.*;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Action;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.producers.services.IOrderUpdateManager;
 import com.academy.projects.ecommerce.ordermanagementservice.models.*;
+import com.academy.projects.ecommerce.ordermanagementservice.repositories.DeliveryFeasibilityRepository;
 import com.academy.projects.ecommerce.ordermanagementservice.repositories.PreOrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PreOrderService implements IPreOrderService {
@@ -32,22 +27,26 @@ public class PreOrderService implements IPreOrderService {
     private final PreOrderRepository preOrderRepository;
     private final ICartToOrderService cartToOrderService;
     private final UserManagementServiceClient userManagementServiceClient;
-    private final ProductSearchServiceClient productSearchServiceClient;
     private final IInventoryService inventoryService;
     private final IOrderUpdateManager orderUpdateManager;
     private final IOrderService orderService;
+    private final IDetailsService detailsService;
+    private final DeliveryFeasibilityRepository deliveryFeasibilityRepository;
 
     private final Logger logger = LoggerFactory.getLogger(PreOrderService.class);
+    private final PaymentDetailsService paymentDetailsService;
 
     @Autowired
-    public PreOrderService(PreOrderRepository preOrderRepository, ICartToOrderService cartToOrderService, UserManagementServiceClient userManagementServiceClient, ProductSearchServiceClient productSearchServiceClient, IInventoryService inventoryService, IOrderUpdateManager orderUpdateManager, IOrderService orderService) {
+    public PreOrderService(PreOrderRepository preOrderRepository, ICartToOrderService cartToOrderService, UserManagementServiceClient userManagementServiceClient, IInventoryService inventoryService, IOrderUpdateManager orderUpdateManager, IOrderService orderService, IDetailsService detailsService, DeliveryFeasibilityRepository deliveryFeasibilityRepository, PaymentDetailsService paymentDetailsService) {
         this.preOrderRepository = preOrderRepository;
         this.cartToOrderService = cartToOrderService;
         this.userManagementServiceClient = userManagementServiceClient;
-        this.productSearchServiceClient = productSearchServiceClient;
         this.inventoryService = inventoryService;
         this.orderUpdateManager = orderUpdateManager;
         this.orderService = orderService;
+        this.detailsService = detailsService;
+        this.deliveryFeasibilityRepository = deliveryFeasibilityRepository;
+        this.paymentDetailsService = paymentDetailsService;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class PreOrderService implements IPreOrderService {
         Set<OrderItem> orderItems = cartToOrderService.getOrderItems();
 
         // Validate and get ETA
-        List<DeliveryFeasibilityDetails> feasibilityDetails = this.validateAndCalculateETA(orderItems, addressId);
+        List<DeliveryFeasibility> feasibilityDetails = this.validateAndCalculateETA(orderItems, addressId);
 
         // Request Inventory Service to Block the Inventory
         inventoryService.block(orderItems);
@@ -80,6 +79,14 @@ public class PreOrderService implements IPreOrderService {
                 paymentStatus = requestDto.getPaymentDetails().getPaymentStatus();
         }
 
+        PaymentDetails paymentDetails = preOrder.getPaymentDetails();
+        if(paymentDetails != null)
+            paymentDetails = paymentDetailsService.save(paymentDetails);
+
+        preOrder.setPaymentDetails(paymentDetails);
+
+        preOrder = preOrderRepository.save(preOrder);
+
         if(preOrder.getOrderStatus().equals(PreOrderStatus.CANCELLED)) {
             if(paymentStatus.equals(PaymentStatus.PAID)) {
                 // Sent Payment Service to Refund
@@ -96,13 +103,20 @@ public class PreOrderService implements IPreOrderService {
             } else if(preOrder.getOrderStatus().equals(PreOrderStatus.CONVERTED)) {
                 preOrder = orderService.createOrders(preOrder);
                 // Send Order created notification to the user
-                orderUpdateManager.sendUpdate(preOrder, Action.CREATE);
+                sendOrderUpdate(preOrder);
             }
         }
 
         preOrder = preOrderRepository.save(preOrder);
+
         logger.info("Pre Order {} updated successfully!!!", preOrder);
         return preOrder;
+    }
+
+    private void sendOrderUpdate(PreOrder preOrder) {
+        for(Order order : preOrder.getOrders()) {
+            orderUpdateManager.sendUpdate(order, Action.CREATE);
+        }
     }
 
     @Override
@@ -110,6 +124,11 @@ public class PreOrderService implements IPreOrderService {
         Pageable pageable = PageRequest.of(page, pageSize);
         if(preOrderStatus != null) return preOrderRepository.findAllByCustomerIdAndOrderStatus(customerId, preOrderStatus, pageable);
         else return preOrderRepository.findAllByCustomerId(customerId);
+    }
+
+    @Override
+    public PreOrder getOrNull(String orderId) {
+        return preOrderRepository.findById(orderId).orElse(null);
     }
 
     private PreOrderStatus from(PaymentStatus paymentStatus) {
@@ -120,7 +139,7 @@ public class PreOrderService implements IPreOrderService {
         };
     }
 
-    private PreOrder createPreOrder(String customerId, Set<OrderItem> orderItems, List<DeliveryFeasibilityDetails> feasibilityDetails, String addressId) {
+    private PreOrder createPreOrder(String customerId, Set<OrderItem> orderItems, List<DeliveryFeasibility> feasibilityDetails, String addressId) {
         PreOrder preOrder = new PreOrder();
         preOrder.setCustomerId(customerId);
         preOrder.setPreOrderItems(from(orderItems, feasibilityDetails));
@@ -128,15 +147,17 @@ public class PreOrderService implements IPreOrderService {
         preOrder.setOrderStatus(PreOrderStatus.PENDING_FOR_PAYMENT);
         preOrder.setTotalAmount(getTotalAmount(orderItems));
         preOrder.setShippingAddressId(addressId);
+        preOrder.setCreatedAt(new Date());
         return preOrderRepository.save(preOrder);
     }
 
-    private Set<PreOrderItem> from(Set<OrderItem> orderItems, List<DeliveryFeasibilityDetails> feasibilityDetails) {
+    private Set<PreOrderItem> from(Set<OrderItem> orderItems, List<DeliveryFeasibility> feasibilityDetails) {
         int i = 0;
         Set<PreOrderItem> preOrderItems = new LinkedHashSet<>();
         for(OrderItem orderItem : orderItems) {
             PreOrderItem preOrderItem = from(orderItem);
-            preOrderItem.setDeliveryFeasibilityDetails(feasibilityDetails.get(i));
+            DeliveryFeasibility deliveryFeasibility = deliveryFeasibilityRepository.save(feasibilityDetails.get(i));
+            preOrderItem.setDeliveryFeasibilityDetails(deliveryFeasibility);
             preOrderItems.add(preOrderItem);
             i++;
         }
@@ -158,29 +179,19 @@ public class PreOrderService implements IPreOrderService {
         return preOrderItem;
     }
 
-    private List<DeliveryFeasibilityDetails> validateAndCalculateETA(Set<OrderItem> orderItems, String addressId) {
+    private List<DeliveryFeasibility> validateAndCalculateETA(Set<OrderItem> orderItems, String addressId) {
         Address customerAddress = this.getCustomerAddress(addressId);
-        List<DeliveryFeasibilityDetails> feasibilityDetails = getDeliveryFeasibilityDetails(orderItems, customerAddress);
-        feasibilityDetails.forEach(feasibilityDetail -> {
-            if(!feasibilityDetail.getIsFeasible()) throw new DeliveryNotPossibleException(feasibilityDetail.getReason());
-        });
-        return feasibilityDetails;
+        return getFeasibilityDetails(orderItems, customerAddress);
     }
 
-    private DeliveryFeasibilityRequestDto from(Set<OrderItem> orderItems, Address customerAddress) {
-        List<DeliveryFeasibilityItem> deliveryFeasibilityItems = new LinkedList<>();
+    private List<DeliveryFeasibility> getFeasibilityDetails(Set<OrderItem> orderItems, Address customerAddress) {
+        List<DeliveryFeasibility> feasibilityDetails = new LinkedList<>();
         for(OrderItem orderItem : orderItems) {
-            deliveryFeasibilityItems.add(DeliveryFeasibilityItem.builder()
-                    .sellerId(orderItem.getSellerId())
-                    .variantId(orderItem.getVariantId())
-                    .quantity(orderItem.getQuantity())
-                    .unitPrice(orderItem.getUnitPrice())
-                    .build());
+            DeliveryFeasibility feasibilityDetail = detailsService.checkFeasibilityAndETA(orderItem, customerAddress);
+            if(feasibilityDetail.getIsFeasible()) feasibilityDetails.add(feasibilityDetail);
+            else throw new DeliveryNotPossibleException(feasibilityDetail.getReason());
         }
-        return DeliveryFeasibilityRequestDto.builder()
-                .customerAddress(customerAddress)
-                .items(deliveryFeasibilityItems)
-                .build();
+        return feasibilityDetails;
     }
 
     private Address getCustomerAddress(String addressId) {
@@ -189,15 +200,6 @@ public class PreOrderService implements IPreOrderService {
             return customerAddress.getBody();
         } catch (Exception e) {
             throw new AddressNotFoundException(addressId, e.getMessage());
-        }
-    }
-
-    private List<DeliveryFeasibilityDetails> getDeliveryFeasibilityDetails(Set<OrderItem> orderItems, Address customerAddress) {
-        try {
-            ResponseEntity<List<DeliveryFeasibilityDetails>> details = productSearchServiceClient.getDeliveryFeasibilityDetails(from(orderItems, customerAddress));
-            return details.getBody();
-        } catch(Exception e) {
-            throw new RuntimeException("Failed to get the delivery feasibility details!!! >>> " + e.getMessage());
         }
     }
 }

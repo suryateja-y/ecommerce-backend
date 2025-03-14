@@ -22,11 +22,12 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
     private final InitializeProductNotifications initializeProductNotifications;
     private final InitializeUserNotifications initializeUserNotifications;
     private final InitializeVariantNotifications initializeVariantNotifications;
+    private final InitializeTrackingNotifications initializeTrackingNotifications;
 
     private final NotificationRepository notificationRepository;
 
     @Autowired
-    public InitializeData(SettingRepository registerRepository, UserRepository userRepository, NotificationRepository notificationRepository, InitiateUsers initiateUsers, InitializeApprovalNotifications initializeApprovalNotifications, InitializeCategoryNotifications initializeCategoryNotifications, InitializeInventoryNotifications initializeInventoryNotifications, InitializeOrderNotifications initializeOrderNotifications, InitializePaymentNotifications initializePaymentNotifications, InitializeProductNotifications initializeProductNotifications, InitializeUserNotifications initializeUserNotifications, InitializeVariantNotifications initializeVariantNotifications) {
+    public InitializeData(SettingRepository registerRepository, UserRepository userRepository, NotificationRepository notificationRepository, InitiateUsers initiateUsers, InitializeApprovalNotifications initializeApprovalNotifications, InitializeCategoryNotifications initializeCategoryNotifications, InitializeInventoryNotifications initializeInventoryNotifications, InitializeOrderNotifications initializeOrderNotifications, InitializePaymentNotifications initializePaymentNotifications, InitializeProductNotifications initializeProductNotifications, InitializeUserNotifications initializeUserNotifications, InitializeVariantNotifications initializeVariantNotifications, InitializeTrackingNotifications initializeTrackingNotifications) {
         registerRepository.deleteAll();
         userRepository.deleteAll();
         notificationRepository.deleteAll();
@@ -39,15 +40,16 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         this.initializeProductNotifications = initializeProductNotifications;
         this.initializeUserNotifications = initializeUserNotifications;
         this.initializeVariantNotifications = initializeVariantNotifications;
+        this.initializeTrackingNotifications = initializeTrackingNotifications;
         this.notificationRepository = notificationRepository;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(alreadySetup) return;
-        this.notificationRepository.deleteAll();
 
         initiateUsers.initialize();
+        notificationRepository.deleteAll();
         initializeApprovalNotifications.initialize();
         initializeCategoryNotifications.initialize();
         initializeInventoryNotifications.initialize();
@@ -56,7 +58,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         initializeProductNotifications.initialize();
         initializeUserNotifications.initialize();
         initializeVariantNotifications.initialize();
-
+        initializeTrackingNotifications.initialize();
         alreadySetup = true;
     }
 }

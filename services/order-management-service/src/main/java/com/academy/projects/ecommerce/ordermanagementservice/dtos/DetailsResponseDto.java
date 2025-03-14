@@ -15,6 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class DetailsResponseDto implements Serializable {
     private Date eta;
+    private long etaInHours;
     private boolean inStock;
     private BigDecimal unitPrice;
 }

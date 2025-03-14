@@ -32,9 +32,9 @@ public class InvoiceService implements IInvoiceService {
         invoice.setCustomerId(order.getCustomerId());
         invoice.setInvoiceNumber(idGenerator.getId("Invoice"));
         invoice.setTotalAmount(order.getTotalAmount());
-        invoice.setCurrencyType(order.getPaymentDetails().getCurrencyType());
+        invoice.setCurrencyType(order.getPreOrder().getPaymentDetails().getCurrencyType());
         invoice.setOrder(order);
-        invoice.setPaymentDetails(order.getPaymentDetails());
+        invoice.setPaymentDetails(order.getPreOrder().getPaymentDetails());
         invoice = invoiceRepository.save(invoice);
         logger.info("Invoice created: '{}'!!!", invoice.getInvoiceNumber());
         return invoice;

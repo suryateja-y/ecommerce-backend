@@ -1,7 +1,7 @@
 package com.academy.projects.ecommerce.ordermanagementservice.models;
 
-import com.academy.projects.ecommerce.ordermanagementservice.dtos.DeliveryFeasibilityDetails;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Entity(name = "order_items")
+@Entity(name = "pre_order_items")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,10 +21,11 @@ public class PreOrderItem extends BaseModel {
     private String productName;
     private String variantId;
     private String sellerId;
-    private int quantity;
+    private Long quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
-    private DeliveryFeasibilityDetails deliveryFeasibilityDetails;
+    @OneToOne
+    private DeliveryFeasibility deliveryFeasibilityDetails;
 
     @Override
     public int hashCode() {

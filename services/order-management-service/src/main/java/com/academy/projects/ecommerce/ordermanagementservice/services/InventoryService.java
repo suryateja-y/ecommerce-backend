@@ -7,6 +7,7 @@ import com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos.Action;
 import com.academy.projects.ecommerce.ordermanagementservice.kafka.producers.inventory.InventoryUpdateManager;
 import com.academy.projects.ecommerce.ordermanagementservice.models.InventoryUnit;
 import com.academy.projects.ecommerce.ordermanagementservice.models.OrderItem;
+import com.academy.projects.ecommerce.ordermanagementservice.models.PreOrderItem;
 import com.academy.projects.ecommerce.ordermanagementservice.repositories.InventoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +99,19 @@ public class InventoryService implements IInventoryService {
         for(InventoryDetailsRequestDto request : requests)
             inventoryUnits.add(getInventoryByVariantIdAndSellerId(request.getVariantId(), request.getSellerId()));
         return inventoryUnits;
+    }
+
+    @Override
+    public void releaseInventory(Set<PreOrderItem> preOrderItems) {
+        List<InventoryUnit> inventoryUnits = new LinkedList<>();
+        synchronized (this) {
+            for (PreOrderItem preOrderItem : preOrderItems) {
+                InventoryUnit inventoryUnit = inventoryRepository.findByVariantIdAndSellerId(preOrderItem.getVariantId(), preOrderItem.getSellerId()).orElseThrow(() -> new InventoryNotFoundException(preOrderItem.getVariantId(), preOrderItem.getSellerId()));
+                inventoryUnit.setQuantity(inventoryUnit.getQuantity() + preOrderItem.getQuantity());
+                inventoryUnits.add(inventoryUnit);
+            }
+            inventoryRepository.saveAll(inventoryUnits);
+        }
     }
 
     @Override

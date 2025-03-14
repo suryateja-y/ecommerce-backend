@@ -1,5 +1,6 @@
 package com.academy.projects.ecommerce.ordermanagementservice.kafka.dtos;
 
+import com.academy.projects.ecommerce.ordermanagementservice.models.CurrencyType;
 import com.academy.projects.ecommerce.ordermanagementservice.models.OrderItem;
 import com.academy.projects.ecommerce.ordermanagementservice.models.OrderStatus;
 import lombok.*;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Builder
 public class OrderDto implements Serializable {
     private String orderId;
+
     private Date orderDate;
     private Set<OrderItem> orderItems;
     private String customerId;
@@ -24,4 +26,5 @@ public class OrderDto implements Serializable {
     private OrderStatus orderStatus;
     private String invoiceId;
     private Action action;
+    private CurrencyType currencyType;
 }

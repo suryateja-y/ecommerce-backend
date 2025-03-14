@@ -52,6 +52,15 @@ public class InitiateUsers {
         admin.setUserState(UserState.APPROVED);
         admin.setUserType(UserType.EMPLOYEE);
         userRepository.save(admin);
+
+        // Customer
+        User customer = new User();
+        customer.setFullName("Academy Customer");
+        customer.setEmail(GlobalData.CUSTOMER_EMAIL);
+        customer.setUserId(GlobalData.CUSTOMER_ID);
+        customer.setUserState(UserState.APPROVED);
+        customer.setUserType(UserType.CUSTOMER);
+        userRepository.save(customer);
     }
 
 }
