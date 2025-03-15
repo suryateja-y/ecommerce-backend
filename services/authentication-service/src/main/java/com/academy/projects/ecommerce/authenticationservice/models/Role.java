@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity(name = "roles")
@@ -15,7 +16,7 @@ import java.util.Set;
 @Setter
 @RequiredArgsConstructor
 @Transactional
-public class Role extends BaseModel {
+public class Role extends BaseModel implements Serializable {
 
     @Transient
     public static final String SEQUENCE_NAME = "roles_sequence";

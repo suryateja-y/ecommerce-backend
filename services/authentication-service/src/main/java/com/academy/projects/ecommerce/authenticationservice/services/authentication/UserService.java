@@ -12,6 +12,7 @@ import com.academy.projects.ecommerce.authenticationservice.repositories.authori
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +67,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#approvalRequest.requester")
     public void changeState(ApprovalRequest approvalRequest) {
         User user = getUser(approvalRequest.getRequester());
         user.setUserState(from(approvalRequest.getStatus()));
@@ -73,6 +75,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#id")
     public void invalidate(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         user.setUserState(UserState.REJECTED);
@@ -83,6 +86,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#userId")
     public User updateState(String userId, UserState userState) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         user.setUserState(userState);

@@ -11,6 +11,7 @@ import com.academy.projects.ecommerce.cartmanagementservice.repositories.CartRep
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,7 @@ public class CartService implements ICartService {
     }
 
     @Override
+    @Cacheable(value = "carts", key = "#userId")
     public Cart get(String userId) {
         Cart cart = cartRepository.findByUserId(userId).orElse(new Cart());
         cart.setCartUnits(validateAndUpdate(cart.getCartUnits()));

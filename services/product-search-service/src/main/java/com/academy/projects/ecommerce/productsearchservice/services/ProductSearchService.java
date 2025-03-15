@@ -14,6 +14,7 @@ import com.academy.projects.ecommerce.productsearchservice.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -47,6 +48,7 @@ public class ProductSearchService implements IProductSearchService {
         this.etaService = etaService;
     }
     @Override
+    @Cacheable(value = "product-search", key = "#searchDto.query")
     public List<Product> search(ProductSearchDto searchDto, int page, int pageSize) {
         try {
             validateUserAddress(searchDto.getUserAddress());

@@ -109,6 +109,17 @@ services:
             -   "9411:9411"
         volumes:
             -   zipkin-data:/var/lib/zipkin/data
+    redis:
+        container_name: redis
+        image: redis
+        restart: always
+        ports:
+            -   "6379:6379"
+        environment:
+            -   REDIS_REPLICATION_MODE=master
+            -   ALLOW_EMPTY_PASSWORD=yes
+        volumes:
+            -   redis-data:/var/lib/redis/data
         
 volumes:
     mongo_db:
@@ -118,3 +129,4 @@ volumes:
     mysql_db_order-inventory:
     mysql_db_payment-management:
     zipkin-data:
+    redis-data:

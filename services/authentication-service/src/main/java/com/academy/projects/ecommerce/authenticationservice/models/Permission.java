@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity(name = "permissions")
@@ -18,7 +19,7 @@ import java.util.Set;
 @Setter
 @RequiredArgsConstructor
 @Transactional
-public class Permission extends BaseModel {
+public class Permission extends BaseModel implements Serializable {
 
     @Transient
     public static final String SEQUENCE_NAME = "permissions_sequence";

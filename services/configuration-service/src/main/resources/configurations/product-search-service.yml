@@ -12,6 +12,12 @@ spring:
         elasticsearch:
             repositories:
                 enabled: true
+        redis:
+            host: localhost
+            port: 6379
     elasticsearch:
         uris: [ http://localhost:9200 ]
         connection-timeout: 10s
+    cache:
+        redis:
+            time-to-live: 300

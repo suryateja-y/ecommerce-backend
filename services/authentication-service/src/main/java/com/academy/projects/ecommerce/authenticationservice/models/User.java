@@ -7,9 +7,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity(name = "users")
 @Getter
 @Setter
@@ -17,7 +17,7 @@ import java.util.Set;
 @Transactional
 @NoArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueEmailAndUserType", columnNames = {"email", "userType"})})
-public class User extends BaseModel {
+public class User extends BaseModel implements Serializable {
     @Transient
     public static final String SEQUENCE_NAME = "User_Sequence";
 

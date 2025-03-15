@@ -17,6 +17,7 @@ import com.academy.projects.ecommerce.productservice.repositories.CategoryReposi
 import com.academy.projects.ecommerce.productservice.repositories.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +84,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Cacheable(value = "product-details", key = "#requestDto.variantId")
     public DetailedProductDto get(GetProductRequestDto requestDto) {
         Product product = productRepository.findById(requestDto.getProductId()).orElseThrow(() -> new ProductNotFoundException(requestDto.getProductId()));
         Variant variant = getVariant(product, requestDto.getVariantId());
