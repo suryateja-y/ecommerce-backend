@@ -17,6 +17,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         this.cartRepository = cartRepository;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {

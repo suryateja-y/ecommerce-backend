@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.Reference;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -23,6 +23,6 @@ public class PackageRequest extends BaseModel implements Serializable {
     private Date eta;
     private PackageStatus packageStatus;
 
-    @Reference
+    @DBRef
     private OrderPackage orderPackage;
 }

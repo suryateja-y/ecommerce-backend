@@ -56,6 +56,7 @@ public class PackageService implements IPackageService {
         return CancelResponseDto.builder().responseStatus(ActionStatus.FAILED).orderPackage(null).build();
     }
 
+    @SuppressWarnings("ExtractMethodRecommender")
     @Override
     public OrderPackage convert(PackageRequest packageRequest) {
         Address customerAddress = this.getCustomerAddress(packageRequest.getCustomerId(), packageRequest.getDeliveryAddressId());

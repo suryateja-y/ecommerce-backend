@@ -1,6 +1,6 @@
 package com.academy.projects.trackingmanagementservice.starters;
 
-import com.academy.projects.trackingmanagementservice.models.PackageRequest;
+import com.academy.projects.trackingmanagementservice.models.*;
 import com.academy.projects.trackingmanagementservice.repositories.PackageRepository;
 import com.academy.projects.trackingmanagementservice.repositories.PackageRequestRepository;
 import com.academy.projects.trackingmanagementservice.repositories.TrackingNumberRepository;
@@ -25,6 +25,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         this.trackingNumberRepository = trackingNumberRepository;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {

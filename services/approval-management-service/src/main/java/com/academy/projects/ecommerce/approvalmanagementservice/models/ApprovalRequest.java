@@ -34,7 +34,6 @@ public class ApprovalRequest extends BaseModel {
     private Object data;
     private List<Action> actions;
 
-//    @JsonIgnore
     @NotBlank(message = "Request approval Kafka topic is mandatory to send the update")
     private String topic;
 

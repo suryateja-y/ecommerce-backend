@@ -1,6 +1,5 @@
 package com.academy.projects.trackingmanagementservice.services;
 
-import com.academy.projects.trackingmanagementservice.exceptions.TrackingNumberGenerationException;
 import com.academy.projects.trackingmanagementservice.models.TrackingNumber;
 import com.academy.projects.trackingmanagementservice.repositories.TrackingNumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class TrackingNumberService implements ITrackingNumberService {
     @Override
     @Transactional
     public String getTrackingNumber() {
-        long currentNumber = trackingNumberRepository.findTrackingNumberById("tracking_number").orElse(1L);
+        long currentNumber = trackingNumberRepository.findTrackingNumberById("tracking_number").orElse(0L);
         String trackingNumber = "pack-" + currentNumber;
         trackingNumberRepository.save(TrackingNumber.builder().id("tracking_number").trackingNumber(currentNumber + 1).build());
         return trackingNumber;

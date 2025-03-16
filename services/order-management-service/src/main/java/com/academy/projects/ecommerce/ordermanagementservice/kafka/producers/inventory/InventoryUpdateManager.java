@@ -15,9 +15,6 @@ public class InventoryUpdateManager {
     public void addObserver(InventoryObserver observer) {
         observers.add(observer);
     }
-    public void removeObserver(InventoryObserver observer) {
-        observers.remove(observer);
-    }
     public void notifyObservers(InventoryUnitDto inventoryUnitDto) {
         for (InventoryObserver observer : observers) {
             observer.sendUpdate(inventoryUnitDto);

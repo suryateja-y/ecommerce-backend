@@ -39,6 +39,7 @@ public class Authenticate extends AbstractGatewayFilterFactory<Authenticate.Conf
         this.tokenProvider = tokenProvider;
     }
 
+    @SuppressWarnings("HttpUrlsUsage")
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {

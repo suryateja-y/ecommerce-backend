@@ -16,5 +16,5 @@ public class TrackingNumber {
     @Id
     private String id;
 
-    private Long trackingNumber = 1L;
+    private Long trackingNumber;
 }

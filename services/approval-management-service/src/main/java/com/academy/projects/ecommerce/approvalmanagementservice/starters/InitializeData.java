@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-@SuppressWarnings("NullableProblems")
 @Component
 public class InitializeData implements ApplicationListener<ContextRefreshedEvent> {
     private boolean alreadySetup = false;
@@ -17,6 +16,7 @@ public class InitializeData implements ApplicationListener<ContextRefreshedEvent
         this.approvalRepository = approvalRepository;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(alreadySetup) return;

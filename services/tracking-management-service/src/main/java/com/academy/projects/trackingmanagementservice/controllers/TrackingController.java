@@ -2,7 +2,6 @@ package com.academy.projects.trackingmanagementservice.controllers;
 
 import com.academy.projects.trackingmanagementservice.kafka.dtos.ActionDto;
 import com.academy.projects.trackingmanagementservice.models.OrderPackage;
-import com.academy.projects.trackingmanagementservice.models.PackageRequest;
 import com.academy.projects.trackingmanagementservice.models.TrackingStatus;
 import com.academy.projects.trackingmanagementservice.services.IPackageService;
 import org.springframework.beans.factory.annotation.Autowired;

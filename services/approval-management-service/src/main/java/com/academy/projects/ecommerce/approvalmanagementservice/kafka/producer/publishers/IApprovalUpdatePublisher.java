@@ -6,6 +6,5 @@ import com.academy.projects.ecommerce.approvalmanagementservice.models.ApprovalR
 
 public interface IApprovalUpdatePublisher {
     void addObserver(ApprovalUpdateObserver observer);
-    void removeObserver(ApprovalUpdateObserver observer);
     void notify(ApprovalRequest request, UpdateType updateType);
 }

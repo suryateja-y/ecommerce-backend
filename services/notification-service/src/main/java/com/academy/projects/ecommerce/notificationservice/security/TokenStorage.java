@@ -7,7 +7,4 @@ public class TokenStorage {
     public static void setToken(String tokenToSet) {
         token.set(tokenToSet);
     }
-    public static String getToken() {
-        return token.get();
-    }
 }

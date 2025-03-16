@@ -10,6 +10,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Set;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity(name = "users")
 @Getter
 @Setter
